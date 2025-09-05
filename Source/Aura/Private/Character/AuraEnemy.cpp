@@ -3,13 +3,39 @@
 
 #include "Character/AuraEnemy.h"
 
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystem/AuraAttributeSet.h"
+
 void AAuraEnemy::HighlightEnemy()
 {
-	bIsHighlighted = true;
+	GetMesh()->SetRenderCustomDepth(true);
 }
 
 void AAuraEnemy::UnHighLightEnemy()
 {
-	bIsHighlighted = false;
+	GetMesh()->SetRenderCustomDepth(false);
 }
+
+
+AAuraEnemy::AAuraEnemy()
+{
+	AbilitySystemComponent->CreateDefaultSubobject<UAuraAbilitySystemComponent>(FName("AbilitySystemComponent"));
+	AbilitySystemComponent->SetIsReplicated(true);
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
+
+	AttributeSet->CreateDefaultSubobject<UAuraAttributeSet>(FName("AttributeSet"));
+}
+
+void AAuraEnemy::BeginPlay()
+{
+	Super::BeginPlay();
+	UnHighLightEnemy();
+	
+	AbilitySystemComponent->InitAbilityActorInfo(this,this);
+}
+
+
+
+
+
 
