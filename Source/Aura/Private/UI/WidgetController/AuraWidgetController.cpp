@@ -3,3 +3,22 @@
 
 #include "UI/WidgetController//AuraWidgetController.h"
 
+FWidgetControllerParm::FWidgetControllerParm()
+{
+}
+
+void UAuraWidgetController::SetWidgetControllerParm(FWidgetControllerParm WidgetControllerParm)
+{
+	PlayerController = WidgetControllerParm.PlayerController;
+	PlayerState = WidgetControllerParm.PlayerState;
+	AttributeSet = WidgetControllerParm.AttributeSet;
+	AbilitySystemComponent = WidgetControllerParm.AbilitySystemComponent;
+}
+
+void UAuraWidgetController::BoardcastInitialAttribute() const
+{
+}
+
+void UAuraWidgetController::BindCallBackToDependences()
+{
+}
