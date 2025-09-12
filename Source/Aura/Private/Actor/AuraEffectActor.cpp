@@ -17,7 +17,8 @@ AAuraEffectActor::AAuraEffectActor()
 	SetRootComponent(Root);
 }
 
-void AAuraEffectActor::ApplyEffectToTarget(AActor* TargetActor, const TSubclassOf<UGameplayEffect> GamePlayEffectClass)
+void AAuraEffectActor::ApplyEffectToTarget(AActor* TargetActor, const TSubclassOf<UGameplayEffect> GamePlayEffectClass
+	,EEffectRemovePolicy EffectRemovePolicy = EEffectRemovePolicy::DoNotRemove)
 {
 	UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
 	if (TargetASC == nullptr)
@@ -28,7 +29,16 @@ void AAuraEffectActor::ApplyEffectToTarget(AActor* TargetActor, const TSubclassO
 	FGameplayEffectContextHandle EffectContextHandle = TargetASC->MakeEffectContext();
 	EffectContextHandle.AddSourceObject(this);
 	FGameplayEffectSpecHandle EffectSpecHandle = TargetASC->MakeOutgoingSpec(GamePlayEffectClass,1.f,EffectContextHandle);
-	TargetASC->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
+	FActiveGameplayEffectHandle ActiveGameplayEffectHandle = TargetASC->ApplyGameplayEffectSpecToSelf(
+		*EffectSpecHandle.Data.Get());
+	
+	//检验是否为无限效果，如果是则加入ActiveEffectHandles映射
+	if (EffectSpecHandle.Data.Get()->Def.Get()->DurationPolicy == EGameplayEffectDurationType::Infinite
+		&& EffectRemovePolicy == EEffectRemovePolicy::RemoveOnEndOverlap)
+	{
+		
+		ActiveEffectHandles.Add(ActiveGameplayEffectHandle,TargetASC);
+	}
 }
 
 
@@ -39,7 +49,76 @@ void AAuraEffectActor::BeginPlay()
 	
 }
 
+void AAuraEffectActor::OnOverlap(AActor* TargetActor)
+{
+	for (FInstantGameplayEffectStruct InstantGameplayEffectStruct : InstantGameplayEffectStructs)
+	{
+		if (InstantGameplayEffectStruct.GameplayEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
+		{
+			ApplyEffectToTarget(TargetActor,InstantGameplayEffectStruct.GameplayEffectClass);
+		}
+	}
+	for (FDurationGameplayEffectStruct DurationGameplayEffectStruct : DurationGameplayEffectStructs)
+	{
+		if (DurationGameplayEffectStruct.GameplayEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
+		{
+			ApplyEffectToTarget(TargetActor,DurationGameplayEffectStruct.GameplayEffectClass);
+		}
+	}
+	for (FInfiniteGameplayEffectStruct InfiniteGameplayEffectStruct : InfiniteGameplayEffectStructs)
+	{
+		if (InfiniteGameplayEffectStruct.GameplayEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
+		{
+			ApplyEffectToTarget(TargetActor,InfiniteGameplayEffectStruct.GameplayEffectClass);
+		}
+	}
+	
+}
 
+void AAuraEffectActor::OnEndOverlap(AActor* TargetActor)
+{
+	for (FInstantGameplayEffectStruct InstantGameplayEffectStruct : InstantGameplayEffectStructs)
+	{
+		if (InstantGameplayEffectStruct.GameplayEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
+		{
+			ApplyEffectToTarget(TargetActor,InstantGameplayEffectStruct.GameplayEffectClass);
+		}
+	}
+	for (FDurationGameplayEffectStruct DurationGameplayEffectStruct : DurationGameplayEffectStructs)
+	{
+		if (DurationGameplayEffectStruct.GameplayEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
+		{
+			ApplyEffectToTarget(TargetActor,DurationGameplayEffectStruct.GameplayEffectClass);
+		}
+	}
+	for (FInfiniteGameplayEffectStruct InfiniteGameplayEffectStruct : InfiniteGameplayEffectStructs)
+	{
+		if (InfiniteGameplayEffectStruct.GameplayEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
+		{
+			ApplyEffectToTarget(TargetActor,InfiniteGameplayEffectStruct.GameplayEffectClass);
+		}
+	}
 
+	UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
+	if (TargetASC == nullptr)
+	{
+		return;
+	}
+	TArray<FActiveGameplayEffectHandle> ActiveGameplayEffectHandlesToRemove;
+	for (auto Pair : ActiveEffectHandles)
+	{
+		if (TargetASC == Pair.Value)
+		{
+			ActiveGameplayEffectHandlesToRemove.Add(Pair.Key);
+			TargetASC->RemoveActiveGameplayEffect(Pair.Key,1);
+		}
+	}
+	for (FActiveGameplayEffectHandle ActiveGameplayEffectHandle : ActiveGameplayEffectHandlesToRemove)
+	{
+		ActiveEffectHandles.Remove(ActiveGameplayEffectHandle);
+	}
+		
 
+	
+}
 
