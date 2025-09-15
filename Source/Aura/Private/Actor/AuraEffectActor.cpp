@@ -32,7 +32,7 @@ void AAuraEffectActor::ApplyEffectToTarget(AActor* TargetActor, const TSubclassO
 	FActiveGameplayEffectHandle ActiveGameplayEffectHandle = TargetASC->ApplyGameplayEffectSpecToSelf(
 		*EffectSpecHandle.Data.Get());
 	
-	//检验是否为无限效果，如果是则加入ActiveEffectHandles映射
+	//检验是否为无限效果 且会在endOverlap时移除，如果是则加入ActiveEffectHandles映射
 	if (EffectSpecHandle.Data.Get()->Def.Get()->DurationPolicy == EGameplayEffectDurationType::Infinite
 		&& EffectRemovePolicy == EEffectRemovePolicy::RemoveOnEndOverlap)
 	{
@@ -69,7 +69,7 @@ void AAuraEffectActor::OnOverlap(AActor* TargetActor)
 	{
 		if (InfiniteGameplayEffectStruct.GameplayEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
 		{
-			ApplyEffectToTarget(TargetActor,InfiniteGameplayEffectStruct.GameplayEffectClass);
+			ApplyEffectToTarget(TargetActor,InfiniteGameplayEffectStruct.GameplayEffectClass,InfiniteGameplayEffectStruct.GameplayEffectRemovePolicy);
 		}
 	}
 	
@@ -95,7 +95,7 @@ void AAuraEffectActor::OnEndOverlap(AActor* TargetActor)
 	{
 		if (InfiniteGameplayEffectStruct.GameplayEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
 		{
-			ApplyEffectToTarget(TargetActor,InfiniteGameplayEffectStruct.GameplayEffectClass);
+			ApplyEffectToTarget(TargetActor,InfiniteGameplayEffectStruct.GameplayEffectClass,InfiniteGameplayEffectStruct.GameplayEffectRemovePolicy);
 		}
 	}
 

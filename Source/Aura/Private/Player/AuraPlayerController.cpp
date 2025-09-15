@@ -21,12 +21,17 @@ void AAuraPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (!IsLocalController())
+	{
+		return; // 服务器端没有本地玩家，直接返回，避免后续空值
+	}
 	check(AuraContext);
-	UEnhancedInputLocalPlayerSubsystem* Subsysterm =
+	check(GetLocalPlayer());
+	UEnhancedInputLocalPlayerSubsystem* Subsystem =
 		ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
 	
-	check(Subsysterm);
-	Subsysterm->AddMappingContext(AuraContext,0);
+	check(Subsystem);
+	Subsystem->AddMappingContext(AuraContext,0);
 	bShowMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Default;
 	FInputModeGameAndUI InputModeData;
