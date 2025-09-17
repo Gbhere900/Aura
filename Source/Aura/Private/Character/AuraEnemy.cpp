@@ -31,6 +31,12 @@ void AAuraEnemy::BeginPlay()
 	Super::BeginPlay();
 	UnHighLightEnemy();
 	
+	InitAbilityActorInfo();
+}
+
+void AAuraEnemy::InitAbilityActorInfo()
+{
+	Super::InitAbilityActorInfo();
 	AbilitySystemComponent->InitAbilityActorInfo(this,this);
 }
 

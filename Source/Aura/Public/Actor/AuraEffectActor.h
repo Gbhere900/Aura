@@ -40,7 +40,8 @@ struct FInstantGameplayEffectStruct
 	TSubclassOf<UGameplayEffect> GameplayEffectClass = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category="AppliedEfffect")
 	EEffectApplicationPolicy GameplayEffectApplicationPolicy = EEffectApplicationPolicy::DoNotApply;
-	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category="AppliedEfffect")
+	float Level = 1;
 };
 
 USTRUCT(BlueprintType)
@@ -53,6 +54,8 @@ struct FDurationGameplayEffectStruct
 	TSubclassOf<UGameplayEffect> GameplayEffectClass = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category="AppliedEfffect")
 	EEffectApplicationPolicy GameplayEffectApplicationPolicy = EEffectApplicationPolicy::DoNotApply;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category="AppliedEfffect")
+	float Level = 1;
 };
 
 USTRUCT(BlueprintType)
@@ -67,6 +70,8 @@ struct FInfiniteGameplayEffectStruct
 	EEffectApplicationPolicy GameplayEffectApplicationPolicy = EEffectApplicationPolicy::DoNotApply;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category="AppliedEfffect")
 	EEffectRemovePolicy GameplayEffectRemovePolicy = EEffectRemovePolicy::DoNotRemove;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category="AppliedEfffect")
+	float Level = 1;
 };
 
 UCLASS()
@@ -79,7 +84,7 @@ public:
 	AAuraEffectActor();
 	UFUNCTION(BlueprintCallable)
 	virtual void ApplyEffectToTarget(AActor* TargetActor,TSubclassOf<UGameplayEffect> GamePlayEffectClass
-		,EEffectRemovePolicy EffectRemovePolicy);
+		,float Level,EEffectRemovePolicy EffectRemovePolicy);
 	
 
 protected:
