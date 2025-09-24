@@ -3,6 +3,7 @@
 
 #include "UI/WidgetController/OverlayWidgetController.h"
 
+
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 
@@ -30,12 +31,16 @@ void UOverlayWidgetController::BindCallBackToDependences()
 	.AddUObject(this,&UOverlayWidgetController::MaxManaChanged);
 	
 	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->EffectTags.AddLambda(
-	[](const FGameplayTagContainer& GameplayTagContainer)
+	[this](const FGameplayTagContainer& GameplayTagContainer)
 	{
 		for (const FGameplayTag &Tag : GameplayTagContainer)
 		{
-			FString Message = FString::Printf(TEXT("GE Tag:%s"),*Tag.ToString());
-			GEngine->AddOnScreenDebugMessage(-1,8,FColor::Red,Message);
+			FGameplayTag MessageTag = FGameplayTag::RequestGameplayTag(FName("Message"));
+			if (Tag.MatchesTag(MessageTag))
+			{
+				const FUIWidgetRow *Row = GetDataTableRowByName<FUIWidgetRow>(DataTable,Tag);
+				MessageWidgetRowDelegate.Broadcast(*Row);
+			}
 		}
 	}
 	);
