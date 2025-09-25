@@ -49,10 +49,14 @@ void AAuraCharacter::InitAbilityActorInfo()
 	//
 	AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
 	AttributeSet = AuraPlayerState->GetAttributeSet();
+
+	//感觉下面的不用写在这个函数里面，不是这个函数的职责？写在这只是因为逻辑顺序不容易出错？
 	if (AAuraPlayerController* PlayerController = Cast<AAuraPlayerController>(GetController()))
 	{
 		AAuraHUD* HUD = Cast<AAuraHUD>(PlayerController->GetHUD());
 		HUD->InitOverlayWidget(PlayerController,AuraPlayerState,AbilitySystemComponent,AttributeSet);
 	}
+	//感觉下面的不用写在这个函数里面，不是这个函数的职责？写在这只是因为逻辑顺序不容易出错(在AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent()之后)？
+	InitialAttributeSet();
 
 }

@@ -30,5 +30,13 @@ void AAuraCharacterBase::InitAbilityActorInfo()
 {
 }
 
+void AAuraCharacterBase::InitialAttributeSet()
+{
+	FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComponent->MakeEffectContext();
+	FGameplayEffectSpecHandle InitialGameplayEffectSpec = AbilitySystemComponent->MakeOutgoingSpec(
+		InitialGamePlayEffect, 1, EffectContextHandle);
+	AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*InitialGameplayEffectSpec.Data.Get(),AbilitySystemComponent);
+}
+
 
 

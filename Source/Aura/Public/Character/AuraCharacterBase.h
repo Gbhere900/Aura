@@ -6,6 +6,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
+#include "GameplayEffect.h"
 #include "AuraCharacterBase.generated.h"
 
 class UAttributeSet;
@@ -32,8 +33,11 @@ protected:
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
 
-	void virtual InitAbilityActorInfo();
+	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category="Attribute")
+	TSubclassOf<UGameplayEffect> InitialGamePlayEffect;
 
+	void virtual InitAbilityActorInfo();
+	void InitialAttributeSet();
 
 
 };
