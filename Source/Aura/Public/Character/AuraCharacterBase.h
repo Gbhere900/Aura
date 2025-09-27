@@ -34,10 +34,14 @@ protected:
 	TObjectPtr<UAttributeSet> AttributeSet;
 
 	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category="Attribute")
-	TSubclassOf<UGameplayEffect> InitialGamePlayEffect;
+	TSubclassOf<UGameplayEffect> InitialPrimaryGamePlayEffect;
+
+	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category="Attribute")
+	TSubclassOf<UGameplayEffect> InitialSecondaryGamePlayEffect;
 
 	void virtual InitAbilityActorInfo();
 	void InitialAttributeSet();
+	void ApplyGameplayEffectSpecToSelf(const TSubclassOf<UGameplayEffect> GameplayEffect,const int Level) const;
 
 
 };
