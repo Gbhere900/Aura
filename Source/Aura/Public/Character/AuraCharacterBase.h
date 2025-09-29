@@ -38,6 +38,9 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category="Attribute")
 	TSubclassOf<UGameplayEffect> InitialSecondaryGamePlayEffect;
+	
+	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category="Attribute")
+	TSubclassOf<UGameplayEffect> InitialVitalGamePlayEffect;
 
 	void virtual InitAbilityActorInfo();
 	void InitialAttributeSet();

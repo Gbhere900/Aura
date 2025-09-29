@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystem/CombatInterface.h"
+
 #include "Character/AuraCharacterBase.h"
 #include "AuraCharacter.generated.h"
 
@@ -10,13 +12,15 @@
  * 
  */
 UCLASS()
-class AURA_API AAuraCharacter : public AAuraCharacterBase
+class AURA_API AAuraCharacter : public AAuraCharacterBase,public ICombatInterface
 {
 	GENERATED_BODY()
 public:
 	AAuraCharacter();
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
+	virtual int GetLevel() override; 
+	
 protected:
 	void virtual InitAbilityActorInfo() override;
 };

@@ -34,11 +34,14 @@ void AAuraCharacterBase::InitialAttributeSet()
 {
 	ApplyGameplayEffectSpecToSelf(InitialPrimaryGamePlayEffect,1);
 	ApplyGameplayEffectSpecToSelf(InitialSecondaryGamePlayEffect,1);
+	ApplyGameplayEffectSpecToSelf(InitialVitalGamePlayEffect,1);
 }
 
 void AAuraCharacterBase::ApplyGameplayEffectSpecToSelf(const TSubclassOf<UGameplayEffect> GameplayEffect, const int Level) const
 {
+	check(GameplayEffect);
 	FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComponent->MakeEffectContext();
+	EffectContextHandle.AddSourceObject(this);
 	FGameplayEffectSpecHandle InitialGameplayEffectSpec = AbilitySystemComponent->MakeOutgoingSpec(
 		GameplayEffect, Level, EffectContextHandle);
 	AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*InitialGameplayEffectSpec.Data.Get(),AbilitySystemComponent);

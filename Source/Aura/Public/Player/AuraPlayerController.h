@@ -30,8 +30,8 @@ private:
 	TObjectPtr<UInputMappingContext> AuraContext;
 	UPROPERTY(EditAnywhere,Category="Input")
 	TObjectPtr<UInputAction> MoveAction;
-	TObjectPtr<IEnemyInterface> LastEnemy;
-	TObjectPtr<IEnemyInterface> CurrentEnemy;
+	IEnemyInterface* LastEnemy;
+	IEnemyInterface* CurrentEnemy;
 	
 	void Move(const FInputActionValue&  InputActionValue);
 	void CursorTrace();

@@ -40,6 +40,11 @@ void AAuraCharacter::OnRep_PlayerState()
 	InitAbilityActorInfo();
 }
 
+int AAuraCharacter::GetLevel()
+{
+	return 1;
+}
+
 void AAuraCharacter::InitAbilityActorInfo()
 {
 	Super::InitAbilityActorInfo();
@@ -61,3 +66,5 @@ void AAuraCharacter::InitAbilityActorInfo()
 	InitialAttributeSet();
 
 }
+
+
