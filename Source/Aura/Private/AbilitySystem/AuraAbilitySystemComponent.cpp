@@ -3,6 +3,9 @@
 
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 
+#include "AuraGameplayTags.h"
+#include "NativeGameplayTags.h"
+
 
 void UAuraAbilitySystemComponent::BeginPlay()
 {
@@ -14,6 +17,7 @@ void UAuraAbilitySystemComponent::BeginPlay()
 void UAuraAbilitySystemComponent::AbilityActorInfoSet()
 {
 	OnGameplayEffectAppliedDelegateToTarget.AddUObject(this,&UAuraAbilitySystemComponent::EffectApplied);
+	GEngine->AddOnScreenDebugMessage(-1,10,FColor::Orange,FAuraGameplayTags::Get().Attributes_Secondary_Armor.ToString());
 }
 
 void UAuraAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& GameplayEffectSpec, FActiveGameplayEffectHandle ActiveGameplayEffectHandle)
