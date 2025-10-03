@@ -3,12 +3,18 @@
 
 #include "UI/WidgetController/AttributeMenuWidgetController.h"
 
+#include "AuraGameplayTags.h"
+#include "AbilitySystem/AuraAttributeSet.h"
+
 void UAttributeMenuWidgetController::BindCallBackToDependences()
 {
-	Super::BindCallBackToDependences();
+	
 }
 
 void UAttributeMenuWidgetController::BoardcastInitialAttribute() const
 {
-	Super::BoardcastInitialAttribute();
+	FAuraAttributeInfo Info = AttributeInfo->GetAttributeInfo(FAuraGameplayTags::Get().Attributes_Primary_Strength,true);
+	Info.AttributeValue = Cast<UAuraAttributeSet>(AttributeSet)->GetStrength();
+	Info.AttributeValue = Cast<UAuraAttributeSet>(AttributeSet)->GetStrength();
+	AttributeInfoDelegate.Broadcast(Info);
 }

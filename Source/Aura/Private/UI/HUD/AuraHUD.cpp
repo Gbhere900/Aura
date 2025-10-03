@@ -4,6 +4,7 @@
 #include "UI/HUD/AuraHUD.h"
 
 #include "Blueprint/UserWidget.h"
+#include "UI/WidgetController/AttributeMenuWidgetController.h"
 #include "UI/WidgetController/AuraWidgetController.h"
 #include "UI/WidgetController/OverlayWidgetController.h"
 
@@ -47,7 +48,7 @@ UAttributeMenuWidgetController* AAuraHUD::GetAttributeSetWidgetController(const 
 {
 	if (AttributeMenuWidgetController == nullptr)
 	{
-		AttributeMenuWidgetController = NewObject<UOverlayWidgetController>(this,OverlayWidgetControllerClass);
+		AttributeMenuWidgetController = NewObject<UAttributeMenuWidgetController>(this,AttributeMenuWidgetControllerClass);
 		AttributeMenuWidgetController->SetWidgetControllerParm(WidgetControllerParm);
 		AttributeMenuWidgetController->BindCallBackToDependences();
 	}
