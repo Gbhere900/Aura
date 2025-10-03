@@ -39,7 +39,7 @@ class AURA_API UAuraWidgetController : public UObject
 public:
 	UFUNCTION(BlueprintCallable)
 	void SetWidgetControllerParm(FWidgetControllerParm WidgetControllerParm);
-
+	
 	void virtual  BoardcastInitialAttribute() const;
 	void virtual BindCallBackToDependences() ;
 protected:

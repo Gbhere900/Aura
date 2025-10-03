@@ -58,22 +58,4 @@ void UOverlayWidgetController::BindCallBackToDependences()
 	);
 }
 
-void UOverlayWidgetController::HealthChanged(const FOnAttributeChangeData& Health)
-{
-	
-}
 
-void UOverlayWidgetController::MaxHealthChanged(const FOnAttributeChangeData& MaxHealth)
-{
-	OnMaxHealthChanged.Broadcast(MaxHealth.NewValue);
-}
-
-void UOverlayWidgetController::ManaChanged(const FOnAttributeChangeData& Mana)
-{
-	OnManaChanged.Broadcast(Mana.NewValue);
-}
-
-void UOverlayWidgetController::MaxManaChanged(const FOnAttributeChangeData& MaxMana)
-{
-	OnMaxManaChanged.Broadcast(MaxMana.NewValue);
-}

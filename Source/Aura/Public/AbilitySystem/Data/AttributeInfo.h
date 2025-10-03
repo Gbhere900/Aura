@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
 #include "Engine/DataAsset.h"
-#include "AttibuteInfo.generated.h"
+#include "AttributeInfo.generated.h"
 
 /**
  * 
@@ -32,7 +32,7 @@ struct FAuraAttributeInfo
 
 
 UCLASS()
-class AURA_API UAttibuteInfo : public UDataAsset
+class AURA_API UAttributeInfo : public UDataAsset
 {
 	GENERATED_BODY()
 
@@ -40,5 +40,5 @@ public:
 	UPROPERTY(BlueprintReadOnly,EditDefaultsOnly)
 	TArray<FAuraAttributeInfo> AttributeInfos;
 
-	FAuraAttributeInfo GetArributeInfo(const FGameplayTag& GameplayTag,bool bLogNotFound);
+	FAuraAttributeInfo GetAttributeInfo(const FGameplayTag& GameplayTag,bool bLogNotFound);
 };

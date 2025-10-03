@@ -7,6 +7,7 @@
 #include "UI/Widget/AuraUserWidget.h"
 #include "AuraHUD.generated.h"
 
+class UAttributeMenuWidgetController;
 class UAttributeSet;
 class UAbilitySystemComponent;
 class UOverlayWidgetController;
@@ -24,6 +25,9 @@ public:
 	UOverlayWidgetController* GetOverlayWidgetController(const FWidgetControllerParm& WidgetControllerParm);
 	void InitOverlayWidget(TObjectPtr<APlayerController> PC,TObjectPtr<APlayerState> PS,TObjectPtr<UAbilitySystemComponent>ASC,TObjectPtr<UAttributeSet>AS);
 	
+	UAttributeMenuWidgetController* GetAttributeSetWidgetController(const FWidgetControllerParm& WidgetControllerParm);
+	
+	
 protected:
 	virtual void BeginPlay() override;
 	
@@ -37,4 +41,11 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UAuraWidgetController> OverlayWidgetControllerClass;
+	
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UAuraWidgetController> AttributeMenuWidgetController;
+	
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UAuraWidgetController> AttributeMenuWidgetControllerClass;
 };

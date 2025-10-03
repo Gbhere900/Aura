@@ -3,3 +3,12 @@
 
 #include "UI/WidgetController/AttributeMenuWidgetController.h"
 
+void UAttributeMenuWidgetController::BindCallBackToDependences()
+{
+	Super::BindCallBackToDependences();
+}
+
+void UAttributeMenuWidgetController::BoardcastInitialAttribute() const
+{
+	Super::BoardcastInitialAttribute();
+}
