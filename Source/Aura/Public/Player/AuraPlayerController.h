@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
+#include "Components/SplineComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "AuraPlayerController.generated.h"
 
@@ -42,6 +43,13 @@ private:
 	IEnemyInterface* LastEnemy;
 	IEnemyInterface* CurrentEnemy;
 
+	FVector CachedDestination = FVector::ZeroVector;
+	TObjectPtr<USplineComponent> SplineComponent;
+	bool bTargeting = false;
+	bool bAutoRunning = false;
+	float FollowTime = 0.f;
+	float ShortestPressThreshold = 0.5f;
+	float AutoRunAccpetanceRadius = 50.f;
 
 	
 	void Move(const FInputActionValue&  InputActionValue);

@@ -4,8 +4,11 @@
 #include "Player/AuraPlayerController.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
+#include "AuraGameplayTags.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "NavigationPath.h"
+#include "NavigationSystem.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraAbilitySystermLibrary.h"
 #include "Interaction/EnemyInterface.h"
@@ -14,6 +17,8 @@
 AAuraPlayerController::AAuraPlayerController()
 {
 	bReplicates =true;
+
+	SplineComponent = CreateDefaultSubobject<USplineComponent>(TEXT("SplineComponent"));
 }
 
 void AAuraPlayerController::Tick(float DeltaTime)
@@ -64,24 +69,89 @@ void AAuraPlayerController::SetupInputComponent()
 }
 void AAuraPlayerController::GameplayAbilityPressedFunc(FGameplayTag GameplayTag)
 {
-
+	if (GameplayTag == FAuraGameplayTags::Get().InputTag_LMB)
+	{
+		bTargeting = CurrentEnemy? true: false;
+		bAutoRunning = false;
+	}
+	
 	GEngine->AddOnScreenDebugMessage(1,3.f,FColor::Red,GameplayTag.ToString());
 }
 
 void AAuraPlayerController::GameplayAbilityHeldFunc(FGameplayTag GameplayTag)
 {
-	if (GetAuraAbilitySystemComponent()!= nullptr)
+	if (GameplayTag != FAuraGameplayTags::Get().InputTag_LMB)
 	{
-		GetAuraAbilitySystemComponent()->GameplayAbilityHeldFunc(GameplayTag);
+		if (GetAuraAbilitySystemComponent()!= nullptr)
+		{
+			GetAuraAbilitySystemComponent()->GameplayAbilityHeldFunc(GameplayTag);
+			return ;
+		}
 	}
+
+	if (bTargeting)
+	{
+		if (GetAuraAbilitySystemComponent())
+		{
+			GetAuraAbilitySystemComponent()->GameplayAbilityHeldFunc(GameplayTag);
+		}
+	}
+	else
+	{
+		FollowTime += GetWorld()->GetDeltaSeconds();
+		FHitResult HitResult;
+		if (GetHitResultUnderCursor(ECC_Visibility,false,HitResult))
+		{
+			CachedDestination = HitResult.ImpactPoint;
+		}
+
+		if (APawn* ControlleredPawn = Cast<APawn>(GetPawn()))
+		{
+			FVector Direction = (CachedDestination -  ControlleredPawn->GetActorLocation()).GetSafeNormal();
+			ControlleredPawn->AddMovementInput(Direction);
+		}
+	}
+
 	GEngine->AddOnScreenDebugMessage(2,3.f,FColor::Blue,GameplayTag.ToString());
 }
 
 void AAuraPlayerController::GameplayAbilityReleasedFunc(FGameplayTag GameplayTag)
 {
-	if (GetAuraAbilitySystemComponent()!= nullptr)
+	if (GameplayTag != FAuraGameplayTags::Get().InputTag_LMB)
 	{
-		GetAuraAbilitySystemComponent()->GameplayAbilityRelesedFunc(GameplayTag);
+		if (GetAuraAbilitySystemComponent()!= nullptr)
+		{
+			GetAuraAbilitySystemComponent()->GameplayAbilityRelesedFunc(GameplayTag);
+			return ;
+		}
+	}
+
+	if (bTargeting)
+	{
+		if (GetAuraAbilitySystemComponent())
+		{
+			GetAuraAbilitySystemComponent()->GameplayAbilityRelesedFunc(GameplayTag);
+		}
+	}
+	else
+	{
+		APawn* ControlleredPawn = Cast<APawn>(GetPawn());
+		if (FollowTime <= ShortestPressThreshold)
+		{
+			if (UNavigationPath* NavigationPath = UNavigationSystemV1::FindPathToLocationSynchronously
+			(this,ControlleredPawn->GetActorLocation(),CachedDestination))
+			{
+				SplineComponent->ClearSplinePoints();
+				for (FVector& PointLocation : NavigationPath->PathPoints)
+				{
+					SplineComponent->AddSplinePoint(PointLocation,ESplineCoordinateSpace::World);
+					DrawDebugSphere(GetWorld(),PointLocation,10,8,FColor::Green,false,5.f);
+				}
+				bAutoRunning = true;
+			}
+		}
+		FollowTime = 0.f;
+		bTargeting = false;
 	}
 	GEngine->AddOnScreenDebugMessage(3,3.f,FColor::Green,GameplayTag.ToString());
 }
