@@ -3,7 +3,9 @@
 
 #include "Character//AuraCharacterBase.h"
 
+#include "AudioMixerBlueprintLibrary.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystem/GameplayAbility/AuraGameplayAbility.h"
 
 // Sets default values
 AAuraCharacterBase::AAuraCharacterBase()
@@ -18,6 +20,23 @@ AAuraCharacterBase::AAuraCharacterBase()
 UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
+}
+
+void AAuraCharacterBase::AddGameplayAbilities()			//视频里是这个函数调用AuraASC中的AddGaneplayAbilities，而不是直接在这里实现
+{
+	if (!HasAuthority())
+		return;
+	for (TSubclassOf<UGameplayAbility> Ability : GameplayAbilities)
+	{
+
+		FGameplayAbilitySpec GameplayAbilitySpec = FGameplayAbilitySpec(Ability,1);
+		if (const UAuraGameplayAbility* AuraGameplayAbility = Cast<UAuraGameplayAbility>(GameplayAbilitySpec.Ability))
+		{
+			GameplayAbilitySpec.DynamicAbilityTags.AddTag(AuraGameplayAbility->InputActionTag);
+		}
+			AbilitySystemComponent->GiveAbility(GameplayAbilitySpec);
+	}
+
 }
 
 void AAuraCharacterBase::BeginPlay()

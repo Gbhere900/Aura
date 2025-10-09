@@ -40,7 +40,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetWidgetControllerParm(FWidgetControllerParm WidgetControllerParm);
 	
-	void virtual  BoardcastInitialAttribute() const;
+	void virtual  BoardcastInitialAttribute() ;
 	void virtual BindCallBackToDependences() ;
 protected:
 	UPROPERTY(BlueprintReadOnly,Category="WidgetController")

@@ -60,7 +60,7 @@ public:
 	UPROPERTY(BlueprintAssignable,Category="GAS|Message")
 	FMessageWidgetRowSignature MessageWidgetRowDelegate;
 
-	virtual void BoardcastInitialAttribute() const override;
+	virtual void BoardcastInitialAttribute() override;
 	virtual void BindCallBackToDependences() override;
 
 protected:

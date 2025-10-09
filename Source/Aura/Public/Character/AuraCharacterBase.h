@@ -22,6 +22,8 @@ public:
 	AAuraCharacterBase();
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	virtual TObjectPtr<UAttributeSet> GetAttributeSet() const {return AttributeSet;}
+	void AddGameplayAbilities();
+	
 protected:
 	virtual void BeginPlay() override;
 	UPROPERTY(EditAnywhere,Category = "Combat")
@@ -46,5 +48,8 @@ protected:
 	void InitialAttributeSet();
 	void ApplyGameplayEffectSpecToSelf(const TSubclassOf<UGameplayEffect> GameplayEffect,const int Level) const;
 
-
+private:
+	UPROPERTY(EditAnywhere,Category="GameplayAbilities")
+	TArray<TSubclassOf<UGameplayAbility>> GameplayAbilities; 
+	
 };

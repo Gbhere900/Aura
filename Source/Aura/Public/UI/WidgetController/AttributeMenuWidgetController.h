@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AbilitySystem/Data/AttributeInfo.h"
+#include "AbilitySystem/Data/AuraAttributeInfo.h"
 #include "UI/WidgetController/AuraWidgetController.h"
 #include "AttributeMenuWidgetController.generated.h"
 
@@ -11,7 +11,8 @@
  * 
  */
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAttributeInfoSignature,const FAuraAttributeInfo& ,AuraAttributeInfo);
+struct FGameplayAttribute;
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAttributeInfoSignature, const FAuraAttributeInfo&, AuraAttributeInfo);
 
 UCLASS(BlueprintType,Blueprintable)
 class AURA_API UAttributeMenuWidgetController : public UAuraWidgetController
@@ -22,7 +23,7 @@ public:
 	virtual void BindCallBackToDependences() override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void BoardcastInitialAttribute() const override;
+	virtual void BoardcastInitialAttribute() override;
 
 	UPROPERTY(BlueprintAssignable,Category="GAS|Attribute")
 	FAttributeInfoSignature AttributeInfoDelegate;
@@ -30,6 +31,7 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UAttributeInfo> AttributeInfo;
 	
-
+private:
+	void BroadcastAttributeInfo(const FGameplayTag& GameplayTag,const FGameplayAttribute& GameplayAttribute); 
 	
 };

@@ -51,6 +51,10 @@ struct FEffectProperties
 	UPROPERTY()
 	ACharacter* TargetCharacter = nullptr;
 };
+
+template<class T>
+using TAttributeFuncPointer = typename TBaseStaticDelegateInstance<T,FDefaultDelegateUserPolicy>::FFuncPtr ;
+
 UCLASS()
 class AURA_API UAuraAttributeSet : public UAttributeSet
 {
@@ -60,6 +64,14 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 
 	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
+
+
+	
+	/*
+	 *GetGameplayAttributeDataDelegate
+	 **/
+	//TBaseStaticDelegateInstance<FGameplayAttribute(),FDefaultDelegateUserPolicy>::FFuncPtr FunctionPointer;
+	TMap<FGameplayTag,TAttributeFuncPointer<FGameplayAttribute()>> TagToFunctionPointer;
 	
 	/*
 	 *Primary Attribute

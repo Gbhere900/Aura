@@ -15,8 +15,9 @@ void UAuraWidgetController::SetWidgetControllerParm(FWidgetControllerParm Widget
 	AbilitySystemComponent = WidgetControllerParm.AbilitySystemComponent;
 }
 
-void UAuraWidgetController::BoardcastInitialAttribute() const
+void UAuraWidgetController::BoardcastInitialAttribute() 
 {
+	
 }
 
 void UAuraWidgetController::BindCallBackToDependences()

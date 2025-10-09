@@ -3,9 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "GameFramework/PlayerController.h"
 #include "AuraPlayerController.generated.h"
 
+class UAuraAbilitySystemComponent;
+class UAuraInputConfig;
 class IEnemyInterface;
 class UInputMappingContext;
 class UInputAction;
@@ -24,6 +27,12 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
 	virtual void Tick(float DeltaTime) override;
+
+	TObjectPtr<UAuraAbilitySystemComponent> AuraAbilitySystemComponent = nullptr;
+	TObjectPtr<UAuraAbilitySystemComponent> GetAuraAbilitySystemComponent();
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	UAuraInputConfig* AuraInputConfig; 
 	
 private:
 	UPROPERTY(EditAnywhere,Category="Input")
@@ -32,9 +41,15 @@ private:
 	TObjectPtr<UInputAction> MoveAction;
 	IEnemyInterface* LastEnemy;
 	IEnemyInterface* CurrentEnemy;
+
+
 	
 	void Move(const FInputActionValue&  InputActionValue);
 	void CursorTrace();
+
+	void GameplayAbilityPressedFunc(FGameplayTag GameplayTag);
+	void GameplayAbilityHeldFunc(FGameplayTag GameplayTag);
+	void GameplayAbilityReleasedFunc(FGameplayTag GameplayTag);
 	
 	
 };

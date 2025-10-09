@@ -18,6 +18,9 @@ public:
 	void BeginPlay() override;
 	void AbilityActorInfoSet();
 	FEffectTags EffectTags;
+
+	void GameplayAbilityHeldFunc(FGameplayTag GameplayTag);
+	void GameplayAbilityRelesedFunc(FGameplayTag GameplayTag);
 protected:
 	void EffectApplied(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& GameplayEffectSpec, FActiveGameplayEffectHandle ActiveGameplayEffectHandle);
 

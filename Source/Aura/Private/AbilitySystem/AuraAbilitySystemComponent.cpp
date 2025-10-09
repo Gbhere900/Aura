@@ -20,6 +20,32 @@ void UAuraAbilitySystemComponent::AbilityActorInfoSet()
 	GEngine->AddOnScreenDebugMessage(-1,10,FColor::Orange,FAuraGameplayTags::Get().Attributes_Secondary_Armor.ToString());
 }
 
+void UAuraAbilitySystemComponent::GameplayAbilityHeldFunc(FGameplayTag GameplayTag)
+{
+	for (auto& GameplayAbilitySpec : GetActivatableAbilities())
+	{
+		if (GameplayAbilitySpec.DynamicAbilityTags.HasTagExact(GameplayTag))
+		{
+			AbilitySpecInputPressed(GameplayAbilitySpec);
+			if (!GameplayAbilitySpec.IsActive())
+			{
+				TryActivateAbility(GameplayAbilitySpec.Handle);
+			}
+		}
+	}
+}
+
+void UAuraAbilitySystemComponent::GameplayAbilityRelesedFunc(FGameplayTag GameplayTag)
+{
+	for (auto& GameplayAbilitySpec : GetActivatableAbilities())
+	{
+		if (GameplayAbilitySpec.DynamicAbilityTags.HasTagExact(GameplayTag))
+		{
+			AbilitySpecInputReleased(GameplayAbilitySpec);
+		}
+	}
+}
+
 void UAuraAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& GameplayEffectSpec, FActiveGameplayEffectHandle ActiveGameplayEffectHandle)
 {
 	FGameplayTagContainer GameplayTagContainer;

@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
 #include "Engine/DataAsset.h"
-#include "AttributeInfo.generated.h"
+#include "AuraAttributeInfo.generated.h"
 
 /**
  * 

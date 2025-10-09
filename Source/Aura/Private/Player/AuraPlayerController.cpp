@@ -2,9 +2,14 @@
 
 
 #include "Player/AuraPlayerController.h"
+
+#include "AbilitySystemBlueprintLibrary.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystem/AuraAbilitySystermLibrary.h"
 #include "Interaction/EnemyInterface.h"
+#include "Player/AuraEnhancedInputComponent.h"
 
 AAuraPlayerController::AAuraPlayerController()
 {
@@ -14,6 +19,17 @@ AAuraPlayerController::AAuraPlayerController()
 void AAuraPlayerController::Tick(float DeltaTime)
 {
 	CursorTrace();
+}
+
+TObjectPtr<UAuraAbilitySystemComponent> AAuraPlayerController::GetAuraAbilitySystemComponent()
+{
+	
+	if (AuraAbilitySystemComponent == nullptr)
+	{
+		AuraAbilitySystemComponent = Cast<UAuraAbilitySystemComponent>
+		(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(this->GetPawn()));
+	}
+	return AuraAbilitySystemComponent;
 }
 
 
@@ -42,9 +58,35 @@ void AAuraPlayerController::BeginPlay()
 void AAuraPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
-	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
-	EnhancedInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&AAuraPlayerController::Move);
+	UAuraEnhancedInputComponent* AuraEnhancedInputComponent = CastChecked<UAuraEnhancedInputComponent>(InputComponent);
+	AuraEnhancedInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&AAuraPlayerController::Move);
+	AuraEnhancedInputComponent->BindAbilityInputAction(AuraInputConfig,this,&ThisClass::GameplayAbilityPressedFunc,&ThisClass::GameplayAbilityHeldFunc,&ThisClass::GameplayAbilityReleasedFunc);
 }
+void AAuraPlayerController::GameplayAbilityPressedFunc(FGameplayTag GameplayTag)
+{
+
+	GEngine->AddOnScreenDebugMessage(1,3.f,FColor::Red,GameplayTag.ToString());
+}
+
+void AAuraPlayerController::GameplayAbilityHeldFunc(FGameplayTag GameplayTag)
+{
+	if (GetAuraAbilitySystemComponent()!= nullptr)
+	{
+		GetAuraAbilitySystemComponent()->GameplayAbilityHeldFunc(GameplayTag);
+	}
+	GEngine->AddOnScreenDebugMessage(2,3.f,FColor::Blue,GameplayTag.ToString());
+}
+
+void AAuraPlayerController::GameplayAbilityReleasedFunc(FGameplayTag GameplayTag)
+{
+	if (GetAuraAbilitySystemComponent()!= nullptr)
+	{
+		GetAuraAbilitySystemComponent()->GameplayAbilityRelesedFunc(GameplayTag);
+	}
+	GEngine->AddOnScreenDebugMessage(3,3.f,FColor::Green,GameplayTag.ToString());
+}
+
+
 
 void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 {
@@ -97,3 +139,4 @@ void AAuraPlayerController::CursorTrace()
 	}
 		
 }
+

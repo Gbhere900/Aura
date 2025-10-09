@@ -5,6 +5,7 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "AuraGameplayTags.h"
 #include "Net/UnrealNetwork.h"
 #include "GameplayEffectExtension.h"
 #include "GameFramework/Character.h"
@@ -16,10 +17,21 @@ FEffectProperties::FEffectProperties()
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
-	// InitHealth(50);
-	// InitMaxHealth(100);
-	// InitMana(50.f);
-	// InitMaxMana(50.f);
+	FAuraGameplayTags Tags = FAuraGameplayTags::Get();
+	TagToFunctionPointer.Add({ Tags .Attributes_Primary_Strength,GetStrengthAttribute});
+	TagToFunctionPointer.Add({ Tags .Attributes_Primary_Intelligence,GetIntelligenceAttribute});
+	TagToFunctionPointer.Add({ Tags .Attributes_Primary_Resilience,GetResilienceAttribute});
+	TagToFunctionPointer.Add({ Tags .Attributes_Primary_Vigor,GetVigorAttribute});
+	TagToFunctionPointer.Add({ Tags .Attributes_Secondary_Armor,GetArmorAttribute});
+	TagToFunctionPointer.Add({ Tags .Attributes_Secondary_ArmorPenetration,GetArmorAttribute});
+	TagToFunctionPointer.Add({ Tags .Attributes_Secondary_BlockChance,GetBlockChanceAttribute});
+	TagToFunctionPointer.Add({ Tags .Attributes_Secondary_CriticalHitChance,GetCriticalHitChanceAttribute});
+	TagToFunctionPointer.Add({ Tags .Attributes_Secondary_CriticalHitDamage,GetCriticalHitDamageAttribute});
+	TagToFunctionPointer.Add({ Tags .Attributes_Secondary_CriticalResistance,GetCriticalHitResistanceAttribute});
+	TagToFunctionPointer.Add({ Tags .Attributes_Secondary_HealthRegeneration,GetHealthRegenerationAttribute});
+	TagToFunctionPointer.Add({ Tags .Attributes_Secondary_ManaRegeneration,GetManaRegenerationAttribute});
+	TagToFunctionPointer.Add({ Tags .Attributes_Secondary_MaxHealth,GetMaxHealthAttribute});
+	TagToFunctionPointer.Add({ Tags .Attributes_Secondary_MaxMana,GetMaxManaAttribute});
 }
 
 void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
@@ -57,37 +69,37 @@ void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, 
 
 void UAuraAttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props)
 {
-	//Source = caiser of the effect,Target = target of the effect;owner if this AS
-	Props.EffectContextHandle = Data.EffectSpec.GetContext();
-	Props.SourceASC = Props.EffectContextHandle.GetOriginalInstigatorAbilitySystemComponent();
-	
-	if (IsValid(Props.SourceASC) && Props.SourceASC->AbilityActorInfo
-		&& Props.SourceASC->AbilityActorInfo->AvatarActor.IsValid())
-	{
-		Props.SourceAvatarActor = Props.SourceASC->AbilityActorInfo->AvatarActor.Get();
-		Props.SourceController = Props.SourceASC->AbilityActorInfo->PlayerController.Get();
-		if (Props.SourceController == nullptr && Props.SourceAvatarActor != nullptr )
-		{
-			if (const APawn* Pawn = Cast<APawn>(Props.SourceAvatarActor))
-			{
-				Props.SourceController = Cast<APawn>(Props.SourceAvatarActor)->GetController();
-			}
-		}
-		if (Props.SourceController != nullptr)
-		{
-			
-			Props.SourceCharacter = Props.SourceController->GetCharacter();
-		}
-	}
-
-	if (Data.Target.AbilityActorInfo.IsValid()&& Data.Target.AbilityActorInfo->AvatarActor.IsValid())
-	{
-		Props.TargetAvatarActor = Data.Target.AbilityActorInfo->AvatarActor.Get();
-		Props.TargetController = Data.Target.AbilityActorInfo->PlayerController.Get();
-		Props.TargetCharacter = Cast<ACharacter>(Props.TargetAvatarActor);
-		Props.TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Props.TargetAvatarActor);
-	}
-}
+ 	//Source = caiser of the effect,Target = target of the effect;owner if this AS
+ 	Props.EffectContextHandle = Data.EffectSpec.GetContext();
+ 	Props.SourceASC = Props.EffectContextHandle.GetOriginalInstigatorAbilitySystemComponent();
+ 	
+ 	if (IsValid(Props.SourceASC) && Props.SourceASC->AbilityActorInfo
+ 		&& Props.SourceASC->AbilityActorInfo->AvatarActor.IsValid())
+ 	{
+ 		Props.SourceAvatarActor = Props.SourceASC->AbilityActorInfo->AvatarActor.Get();
+ 		Props.SourceController = Props.SourceASC->AbilityActorInfo->PlayerController.Get();
+ 		if (Props.SourceController == nullptr && Props.SourceAvatarActor != nullptr )
+ 		{
+ 			if (const APawn* Pawn = Cast<APawn>(Props.SourceAvatarActor))
+ 			{
+ 				Props.SourceController = Cast<APawn>(Props.SourceAvatarActor)->GetController();
+ 			}
+ 		}
+ 		if (Props.SourceController != nullptr)
+ 		{
+ 			
+ 			Props.SourceCharacter = Props.SourceController->GetCharacter();
+ 		}
+ 	}
+ 
+ 	if (Data.Target.AbilityActorInfo.IsValid()&& Data.Target.AbilityActorInfo->AvatarActor.IsValid())
+ 	{
+ 		Props.TargetAvatarActor = Data.Target.AbilityActorInfo->AvatarActor.Get();
+ 		Props.TargetController = Data.Target.AbilityActorInfo->PlayerController.Get();
+ 		Props.TargetCharacter = Cast<ACharacter>(Props.TargetAvatarActor);
+ 		Props.TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Props.TargetAvatarActor);
+ 	}
+ }
 
 void UAuraAttributeSet::OnRep_Strength(const FGameplayAttributeData& OldStrength) const
 {
