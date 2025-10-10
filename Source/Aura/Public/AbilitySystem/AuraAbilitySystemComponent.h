@@ -22,6 +22,7 @@ public:
 	void GameplayAbilityHeldFunc(FGameplayTag GameplayTag);
 	void GameplayAbilityRelesedFunc(FGameplayTag GameplayTag);
 protected:
-	void EffectApplied(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& GameplayEffectSpec, FActiveGameplayEffectHandle ActiveGameplayEffectHandle);
+	UFUNCTION(Client,Reliable)		//为了解决客户端不显示应用效果的UI而写的，但是具体怎么实现
+	void ClientEffectApplied(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& GameplayEffectSpec, FActiveGameplayEffectHandle ActiveGameplayEffectHandle);
 
 };

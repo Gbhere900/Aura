@@ -24,6 +24,26 @@ AAuraPlayerController::AAuraPlayerController()
 void AAuraPlayerController::Tick(float DeltaTime)
 {
 	CursorTrace();
+	AutoRunning();
+}
+
+void AAuraPlayerController::AutoRunning()
+{
+	if (!bAutoRunning)
+	{
+		return;
+	}
+	if ( TObjectPtr<APawn> ControlledPawn = GetPawn())
+	{
+		FVector LocationOnSpline = SplineComponent->FindLocationClosestToWorldLocation(ControlledPawn->GetActorLocation(),ESplineCoordinateSpace::World);
+		FVector Direction = SplineComponent->FindDirectionClosestToWorldLocation(LocationOnSpline,ESplineCoordinateSpace::World);
+		ControlledPawn->AddMovementInput(Direction);
+		const float Distance = (LocationOnSpline - CachedDestination).Length();
+		if (Distance < ShortestPressThreshold)
+		{
+			bAutoRunning = false;
+		}
+	}
 }
 
 TObjectPtr<UAuraAbilitySystemComponent> AAuraPlayerController::GetAuraAbilitySystemComponent()
@@ -99,7 +119,6 @@ void AAuraPlayerController::GameplayAbilityHeldFunc(FGameplayTag GameplayTag)
 	else
 	{
 		FollowTime += GetWorld()->GetDeltaSeconds();
-		FHitResult HitResult;
 		if (GetHitResultUnderCursor(ECC_Visibility,false,HitResult))
 		{
 			CachedDestination = HitResult.ImpactPoint;
@@ -147,7 +166,13 @@ void AAuraPlayerController::GameplayAbilityReleasedFunc(FGameplayTag GameplayTag
 					SplineComponent->AddSplinePoint(PointLocation,ESplineCoordinateSpace::World);
 					DrawDebugSphere(GetWorld(),PointLocation,10,8,FColor::Green,false,5.f);
 				}
-				bAutoRunning = true;
+				if (NavigationPath->PathPoints.Num()>0)
+				{
+					CachedDestination = NavigationPath->PathPoints[NavigationPath->PathPoints.Num()-1];
+					bAutoRunning = true;
+				}
+				
+				
 			}
 		}
 		FollowTime = 0.f;
@@ -155,6 +180,7 @@ void AAuraPlayerController::GameplayAbilityReleasedFunc(FGameplayTag GameplayTag
 	}
 	GEngine->AddOnScreenDebugMessage(3,3.f,FColor::Green,GameplayTag.ToString());
 }
+
 
 
 
@@ -175,36 +201,22 @@ void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 
 void AAuraPlayerController::CursorTrace()
 {
-	FHitResult HitResult;
+	
 	GetHitResultUnderCursor(ECC_Visibility,false,HitResult);
 	if (!HitResult.bBlockingHit)
 		return;
 	LastEnemy = CurrentEnemy;
 	CurrentEnemy = Cast<IEnemyInterface>(HitResult.GetActor());
-	if (CurrentEnemy == nullptr)
+	if (LastEnemy != CurrentEnemy)
 	{
-		if (LastEnemy == nullptr)
-			return;
-		else
+		if (LastEnemy)
 		{
 			LastEnemy->UnHighLightEnemy();
 		}
-	}
-	else
-	{
-		if (LastEnemy == nullptr)
+		
+		if (CurrentEnemy)
 		{
 			CurrentEnemy->HighlightEnemy();
-		}
-		else
-		{
-			if (CurrentEnemy == LastEnemy)
-			{return;}
-			else
-			{
-				LastEnemy->UnHighLightEnemy();
-				CurrentEnemy->HighlightEnemy();
-			}
 		}
 	}
 		

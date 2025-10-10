@@ -42,6 +42,8 @@ private:
 	TObjectPtr<UInputAction> MoveAction;
 	IEnemyInterface* LastEnemy;
 	IEnemyInterface* CurrentEnemy;
+	FHitResult HitResult;
+	
 
 	FVector CachedDestination = FVector::ZeroVector;
 	TObjectPtr<USplineComponent> SplineComponent;
@@ -49,7 +51,7 @@ private:
 	bool bAutoRunning = false;
 	float FollowTime = 0.f;
 	float ShortestPressThreshold = 0.5f;
-	float AutoRunAccpetanceRadius = 50.f;
+	float AutoRunAcceptanceRadius = 50.f;
 
 	
 	void Move(const FInputActionValue&  InputActionValue);
@@ -58,6 +60,8 @@ private:
 	void GameplayAbilityPressedFunc(FGameplayTag GameplayTag);
 	void GameplayAbilityHeldFunc(FGameplayTag GameplayTag);
 	void GameplayAbilityReleasedFunc(FGameplayTag GameplayTag);
+
+	void AutoRunning();
 	
 	
 };

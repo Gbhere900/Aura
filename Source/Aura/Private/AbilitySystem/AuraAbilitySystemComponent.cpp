@@ -16,7 +16,7 @@ void UAuraAbilitySystemComponent::BeginPlay()
 
 void UAuraAbilitySystemComponent::AbilityActorInfoSet()
 {
-	OnGameplayEffectAppliedDelegateToTarget.AddUObject(this,&UAuraAbilitySystemComponent::EffectApplied);
+	OnGameplayEffectAppliedDelegateToTarget.AddUObject(this,&UAuraAbilitySystemComponent::ClientEffectApplied);
 	GEngine->AddOnScreenDebugMessage(-1,10,FColor::Orange,FAuraGameplayTags::Get().Attributes_Secondary_Armor.ToString());
 }
 
@@ -46,7 +46,7 @@ void UAuraAbilitySystemComponent::GameplayAbilityRelesedFunc(FGameplayTag Gamepl
 	}
 }
 
-void UAuraAbilitySystemComponent::EffectApplied(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& GameplayEffectSpec, FActiveGameplayEffectHandle ActiveGameplayEffectHandle)
+void UAuraAbilitySystemComponent::ClientEffectApplied_Implementation(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& GameplayEffectSpec, FActiveGameplayEffectHandle ActiveGameplayEffectHandle)
 {
 	FGameplayTagContainer GameplayTagContainer;
 	GameplayEffectSpec.GetAllAssetTags(GameplayTagContainer);

@@ -18,12 +18,12 @@ class AURA_API UAuraEnhancedInputComponent : public UEnhancedInputComponent
 
 public:
 	template<class UserClass,typename PressedFuncType,typename HeldFuncType,typename RelesedFuncType>
-	void BindAbilityInputAction(UAuraInputConfig* AuraInputConfig,UserClass* Object,PressedFuncType PressedFunc,HeldFuncType HeldFunc,RelesedFuncType RelesedFunc);
+	void BindAbilityInputAction(UAuraInputConfig* AuraInputConfig,UserClass* Object,PressedFuncType PressedFunc,HeldFuncType HeldFunc,RelesedFuncType ReleasedFunc);
 };
 
 template <class UserClass, typename PressedPuncType, typename HeldFuncType, typename RelesedFuncType>
 void UAuraEnhancedInputComponent::BindAbilityInputAction(UAuraInputConfig* AuraInputConfig, UserClass* Object,
-	PressedPuncType PressedFunc, HeldFuncType HeldFunc, RelesedFuncType RelesedFunc)					//为什么不用函数指针而是模版类型
+	PressedPuncType PressedFunc, HeldFuncType HeldFunc, RelesedFuncType ReleasedFunc)					//为什么不用函数指针而是模版类型
 {
 	check(AuraInputConfig)
 	for (const auto & AbilityInputAction : AuraInputConfig->InputActions)
@@ -38,9 +38,9 @@ void UAuraEnhancedInputComponent::BindAbilityInputAction(UAuraInputConfig* AuraI
 			{
 				BindAction(AbilityInputAction.InputAction,ETriggerEvent::Triggered,Object, HeldFunc,AbilityInputAction.AbilityTag);
 			}
-			if (RelesedFunc)
+			if (ReleasedFunc)
 			{
-				BindAction(AbilityInputAction.InputAction,ETriggerEvent::Canceled,Object, RelesedFunc,AbilityInputAction.AbilityTag);
+				BindAction(AbilityInputAction.InputAction,ETriggerEvent::Completed,Object, ReleasedFunc,AbilityInputAction.AbilityTag);
 			}
 		}
 	}
