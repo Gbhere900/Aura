@@ -23,6 +23,8 @@ class AURA_API ICombatInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	virtual int GetLevel() = 0;
+
+	virtual FTransform GetSocketTransform() = 0;
 };
 
 //这个类是我自己写的，不保证合理

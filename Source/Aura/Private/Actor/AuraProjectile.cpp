@@ -10,6 +10,7 @@ AAuraProjectile::AAuraProjectile()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
+	bReplicates = true;					//因为投射物能力只在服务器触发，所以让火球的可复制为true,客户端运行的是火球的复制
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 	SetRootComponent(SphereComponent);
 	SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);

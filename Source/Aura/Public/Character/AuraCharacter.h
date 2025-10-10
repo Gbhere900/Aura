@@ -19,8 +19,12 @@ public:
 	AAuraCharacter();
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
-	virtual int GetLevel() override; 
+	virtual int GetLevel() override;
+	virtual FTransform GetSocketTransform() override; 
 	
 protected:
 	void virtual InitAbilityActorInfo() override;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Socket")
+	FName SocketName = FName();
 };

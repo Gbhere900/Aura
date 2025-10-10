@@ -4,6 +4,7 @@
 #include "Character/AuraCharacter.h"
 
 #include "AbilitySystemComponent.h"
+#include "Engine/SkeletalMeshSocket.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/HUD.h"
 #include "Player/AuraPlayerController.h"
@@ -46,6 +47,8 @@ int AAuraCharacter::GetLevel()
 	return 1;
 }
 
+
+
 void AAuraCharacter::InitAbilityActorInfo()
 {
 	Super::InitAbilityActorInfo();
@@ -68,4 +71,13 @@ void AAuraCharacter::InitAbilityActorInfo()
 
 }
 
+ FTransform AAuraCharacter::GetSocketTransform()
+{
+	FTransform SocketTransform = GetActorTransform();
+	if (Weapon->GetSocketByName(SocketName))
+	{
+		SocketTransform = Weapon->GetSocketByName(SocketName)->GetSocketTransform(Weapon);
+	}
+	return SocketTransform;
+}
 
