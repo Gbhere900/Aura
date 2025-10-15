@@ -6,6 +6,7 @@
 #include "AudioMixerBlueprintLibrary.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/GameplayAbility/AuraGameplayAbility.h"
+#include "Aura/Aura.h"
 
 // Sets default values
 AAuraCharacterBase::AAuraCharacterBase()
@@ -15,6 +16,8 @@ AAuraCharacterBase::AAuraCharacterBase()
 	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>("Weapon");
 	Weapon->SetupAttachment(GetMesh(),FName("WeaponHandSocket"));
 	Weapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	GetMesh()->SetCollisionResponseToChannel(ECC_Projectile,ECR_Overlap);
 }
 
 UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
