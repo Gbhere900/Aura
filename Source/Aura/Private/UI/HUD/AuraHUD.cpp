@@ -35,6 +35,7 @@ UOverlayWidgetController* AAuraHUD::GetOverlayWidgetController(const FWidgetCont
 
 void AAuraHUD::InitOverlayWidget(TObjectPtr<APlayerController> PC,TObjectPtr<APlayerState> PS,TObjectPtr<UAbilitySystemComponent>ASC,TObjectPtr<UAttributeSet>AS)
 {
+	
 	UUserWidget* UserWidget = CreateWidget<UUserWidget>(GetWorld(),OverlayWidgetClass);
 	UAuraUserWidget* OverlayWidget = Cast<UAuraUserWidget>(UserWidget);
 	FWidgetControllerParm WidgetComtrollerParm = FWidgetControllerParm(PC,PS,ASC,AS);

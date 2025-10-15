@@ -7,6 +7,7 @@
 #include "AuraProjectileSpell.generated.h"
 
 class AAuraProjectile;
+
 /**
  * 
  */
@@ -19,5 +20,9 @@ class AURA_API UAuraProjectileSpell : public UAuraGameplayAbility
 	protected:
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	TSubclassOf<AAuraProjectile> AuraProjectileClass;
+
+	UFUNCTION(BlueprintCallable)
+	void SpawnFireBLot(FVector TargetPosition);
+
 
 };

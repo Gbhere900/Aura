@@ -63,7 +63,11 @@ void AAuraCharacter::InitAbilityActorInfo()
 	if (AAuraPlayerController* PlayerController = Cast<AAuraPlayerController>(GetController()))
 	{
 		AAuraHUD* HUD = Cast<AAuraHUD>(PlayerController->GetHUD());
-		HUD->InitOverlayWidget(PlayerController,AuraPlayerState,AbilitySystemComponent,AttributeSet);
+		if (HUD) // 如果是服务器端没有HUD,null
+		{
+			HUD->InitOverlayWidget(PlayerController,AuraPlayerState,AbilitySystemComponent,AttributeSet);
+		}
+		
 	}
 	//感觉下面的不用写在这个函数里面，不是这个函数的职责？写在这只是因为逻辑顺序不容易出错(在AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent()之后)？
 	//我觉得可以放在PossessedBy函数中？

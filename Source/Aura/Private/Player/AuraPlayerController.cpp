@@ -85,6 +85,8 @@ void AAuraPlayerController::SetupInputComponent()
 	Super::SetupInputComponent();
 	UAuraEnhancedInputComponent* AuraEnhancedInputComponent = CastChecked<UAuraEnhancedInputComponent>(InputComponent);
 	AuraEnhancedInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&AAuraPlayerController::Move);
+	AuraEnhancedInputComponent->BindAction(ShiftAction,ETriggerEvent::Started,this,&AAuraPlayerController::ShiftPressedCallBack);
+	AuraEnhancedInputComponent->BindAction(ShiftAction,ETriggerEvent::Completed,this,&AAuraPlayerController::ShiftReleasedCallBack);
 	AuraEnhancedInputComponent->BindAbilityInputAction(AuraInputConfig,this,&ThisClass::GameplayAbilityPressedFunc,&ThisClass::GameplayAbilityHeldFunc,&ThisClass::GameplayAbilityReleasedFunc);
 }
 void AAuraPlayerController::GameplayAbilityPressedFunc(FGameplayTag GameplayTag)
@@ -109,7 +111,7 @@ void AAuraPlayerController::GameplayAbilityHeldFunc(FGameplayTag GameplayTag)
 		}
 	}
 
-	if (bTargeting)
+	if (bTargeting||bIsHoldingShift)
 	{
 		if (GetAuraAbilitySystemComponent())
 		{
@@ -145,14 +147,9 @@ void AAuraPlayerController::GameplayAbilityReleasedFunc(FGameplayTag GameplayTag
 		}
 	}
 
-	if (bTargeting)
-	{
-		if (GetAuraAbilitySystemComponent())
-		{
-			GetAuraAbilitySystemComponent()->GameplayAbilityRelesedFunc(GameplayTag);
-		}
-	}
-	else
+	GetAuraAbilitySystemComponent()->GameplayAbilityRelesedFunc(GameplayTag);
+	
+	if (!bTargeting && !bIsHoldingShift)
 	{
 		APawn* ControlleredPawn = Cast<APawn>(GetPawn());
 		if (FollowTime <= ShortestPressThreshold)
@@ -177,6 +174,10 @@ void AAuraPlayerController::GameplayAbilityReleasedFunc(FGameplayTag GameplayTag
 		}
 		FollowTime = 0.f;
 		bTargeting = false;
+	}
+	else
+	{
+		
 	}
 	GEngine->AddOnScreenDebugMessage(3,3.f,FColor::Green,GameplayTag.ToString());
 }

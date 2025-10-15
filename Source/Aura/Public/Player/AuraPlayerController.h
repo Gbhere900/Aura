@@ -40,6 +40,9 @@ private:
 	TObjectPtr<UInputMappingContext> AuraContext;
 	UPROPERTY(EditAnywhere,Category="Input")
 	TObjectPtr<UInputAction> MoveAction;
+
+	UPROPERTY(EditAnywhere,Category="Input")
+	TObjectPtr<UInputAction> ShiftAction;
 	IEnemyInterface* LastEnemy;
 	IEnemyInterface* CurrentEnemy;
 	FHitResult HitResult;
@@ -48,12 +51,14 @@ private:
 	FVector CachedDestination = FVector::ZeroVector;
 	TObjectPtr<USplineComponent> SplineComponent;
 	bool bTargeting = false;
+	bool bIsHoldingShift = false;
 	bool bAutoRunning = false;
 	float FollowTime = 0.f;
 	float ShortestPressThreshold = 0.5f;
 	float AutoRunAcceptanceRadius = 50.f;
 
-	
+	void ShiftPressedCallBack(){ bIsHoldingShift = true; }
+	void ShiftReleasedCallBack(){ bIsHoldingShift = false;}
 	void Move(const FInputActionValue&  InputActionValue);
 	void CursorTrace();
 
