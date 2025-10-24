@@ -3,11 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayEffectTypes.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/Actor.h"
 #include "AuraProjectile.generated.h"
 
 
+struct FGameplayEffectSpecHandle;
 class UProjectileMovementComponent;
 class UNiagaraSystem;
 
@@ -18,6 +20,9 @@ class AURA_API AAuraProjectile : public AActor
 	
 public:	
 	AAuraProjectile();
+	
+	UPROPERTY(BlueprintReadWrite,meta=(ExposeOnSpawn = true))
+	FGameplayEffectSpecHandle GameplayEffectSpec;
 
 protected:
 	UPROPERTY(VisibleAnywhere)
@@ -34,7 +39,9 @@ protected:
 	virtual void Destroyed() override;
 
 	UPROPERTY(EditDefaultsOnly)
-	float LifeTime = 15;
+	float LifeTime = 5;
+
+
 
 private:
 	

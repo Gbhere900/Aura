@@ -11,6 +11,8 @@ UTargetDataUnderMouse* UTargetDataUnderMouse::CreateTargetDataUnderMouse(UGamepl
 	return MyObj;
 }
 
+
+//或许使得服务端获取位置有更方便简单的方法，类似于Unity的RPC
 void UTargetDataUnderMouse::Activate()
 {
 	Super::Activate();

@@ -52,7 +52,16 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMo
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
 		SetHealth(FMath::Clamp(GetHealth(),0.f,GetMaxHealth()));
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,
+		                                 FString::Printf(
+			                                 TEXT("Health changed on %s ,health = %f"),
+			                                 *GetActorInfo()->AvatarActor->GetName(), GetHealth()));
+		
+		UE_LOG(LogTemp,Warning,TEXT("Health changed on %s ,health = %f"), *GetActorInfo()->AvatarActor->GetName(),GetHealth());
+
+
 	}
+	TEXT("hello");
 
 	if (Data.EvaluatedData.Attribute == GetManaAttribute())
 	{

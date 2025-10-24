@@ -3,6 +3,8 @@
 
 #include "Actor/AuraProjectile.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "NiagaraFunctionLibrary.h"
@@ -33,10 +35,10 @@ AAuraProjectile::AAuraProjectile()
 void AAuraProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	if(!HasAuthority())
-	{
+	//if(!HasAuthority())
+	//{
 		LoopingAudioComponent = UGameplayStatics::SpawnSoundAttached(LoopingSound,GetRootComponent());
-	}
+	//}
 	
 	SetLifeSpan(LifeTime);
 }
@@ -53,18 +55,22 @@ void AAuraProjectile::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedCompon
 	{
 		return;
 	}
+	if (UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OtherActor))
+	{
+		ASC->ApplyGameplayEffectSpecToSelf(*GameplayEffectSpec.Data);
+	}
 	Destroy();
 }
 
 void AAuraProjectile::Destroyed()
 {
 	Super::Destroyed();
-	if (!HasAuthority())
-	{
+	//if (!HasAuthority())
+	//{
 		LoopingAudioComponent->Stop();
 		UGameplayStatics::PlaySoundAtLocation(this,HitSound,GetActorLocation(),FRotator::ZeroRotator);
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this,HitParticle,GetActorLocation(),FRotator::ZeroRotator);
-	}
+	//}
 	
 }
 

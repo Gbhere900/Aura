@@ -1,0 +1,46 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Engine/DataAsset.h"
+#include "CharacterClassInfo.generated.h"
+
+class UGameplayEffect;
+/**
+ * 
+ */
+UENUM(BlueprintType)
+enum class ECharacterClass  : uint8 
+{
+		Warrior,
+		Ranger,
+		Elementalist
+};
+
+USTRUCT(BlueprintType)
+struct FCharacterClassDefaultInfo
+{
+	GENERATED_BODY()
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UGameplayEffect> PrimaryAttributeEffect;
+};
+UCLASS()
+class AURA_API UCharacterClassInfo : public UDataAsset
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly)
+	TMap<ECharacterClass, FCharacterClassDefaultInfo> Class_PrimaryAttributeEffectMap;
+
+	
+	UPROPERTY(EditDefaultsOnly,Category="Common")
+	TSubclassOf<UGameplayEffect> SecondaryAttributeEffect;
+
+	UPROPERTY(EditDefaultsOnly,Category="Common")
+	TSubclassOf<UGameplayEffect> VitalAttributeEffect;
+
+public:
+	TSubclassOf<UGameplayEffect> GetClassPrimaryEffect(const ECharacterClass& CharacterClass);
+};
+

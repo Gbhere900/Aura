@@ -3,6 +3,7 @@
 
 #include "AbilitySystem/GameplayAbility/AuraProjectileSpell.h"
 
+#include "AbilitySystemComponent.h"
 #include "AbilitySystem/CombatInterface.h"
 #include "Actor/AuraProjectile.h"
 #include "Misc/LowLevelTestAdapter.h"
@@ -36,6 +37,9 @@ void UAuraProjectileSpell::SpawnFireBLot(FVector TargetPosition)
 	CHECK(AuraProjectile);
 	FRotator Direction =(TargetPosition - SpawnTransform.GetLocation()).Rotation();
 	AuraProjectile->SetActorRotation(Direction);
+
+	UAbilitySystemComponent* SourceASC = GetAbilitySystemComponentFromActorInfo();
+	AuraProjectile->GameplayEffectSpec = SourceASC->MakeOutgoingSpec(GameplayEffect,GetAbilityLevel(),SourceASC->MakeEffectContext());
 	
 	AuraProjectile->FinishSpawning(SpawnTransform);
 }

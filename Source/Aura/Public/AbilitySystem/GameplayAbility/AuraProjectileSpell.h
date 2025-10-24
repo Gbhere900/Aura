@@ -21,8 +21,11 @@ class AURA_API UAuraProjectileSpell : public UAuraGameplayAbility
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	TSubclassOf<AAuraProjectile> AuraProjectileClass;
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UGameplayEffect> GameplayEffect;
+
 	UFUNCTION(BlueprintCallable)
 	void SpawnFireBLot(FVector TargetPosition);
 
-
+	
 };
