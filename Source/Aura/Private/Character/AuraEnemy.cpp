@@ -4,6 +4,7 @@
 #include "Character/AuraEnemy.h"
 
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystem/AuraAbilitySystermLibrary.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/WidgetComponent.h"
@@ -66,6 +67,16 @@ void AAuraEnemy::InitAbilityActorInfo()
 	AbilitySystemComponent->InitAbilityActorInfo(this,this);
 
 	InitialAttributeSet();
+}
+
+void AAuraEnemy::InitialAttributeSet()
+{
+	if (!HasAuthority())
+	{
+		return;
+	}
+
+	UAuraAbilitySystermLibrary::InitializeCharacterAttributeByClass(this,CharacterClass,Level,AbilitySystemComponent);
 }
 
 void AAuraEnemy::BoardcastInitialAttribute()

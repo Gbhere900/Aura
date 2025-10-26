@@ -61,7 +61,6 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMo
 
 
 	}
-	TEXT("hello");
 
 	if (Data.EvaluatedData.Attribute == GetManaAttribute())
 	{

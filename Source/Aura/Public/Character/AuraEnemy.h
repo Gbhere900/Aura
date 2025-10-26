@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystem/CombatInterface.h"
+#include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "Character/AuraCharacterBase.h"
 #include "Components/WidgetComponent.h"
 #include "Interaction/EnemyInterface.h"
@@ -13,6 +14,8 @@
 /**
  * 
  */
+
+enum class ECharacterClass : uint8;
 
 UCLASS()
 class AURA_API AAuraEnemy : public AAuraCharacterBase,public IEnemyInterface,public ICombatInterface
@@ -45,6 +48,14 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere)
 	TObjectPtr<UWidgetComponent> EnemyHealthBarWidgetComponent;
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category="CharacterClassDefault")
+	int Level = 1;
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category="CharacterClassDefault")
+	ECharacterClass CharacterClass = ECharacterClass::Warrior;
+
+	virtual void InitialAttributeSet() override;
 
 	void BoardcastInitialAttribute() ;
 

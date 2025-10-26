@@ -30,17 +30,18 @@ class AURA_API UCharacterClassInfo : public UDataAsset
 {
 	GENERATED_BODY()
 
+
 	UPROPERTY(EditDefaultsOnly)
 	TMap<ECharacterClass, FCharacterClassDefaultInfo> Class_PrimaryAttributeEffectMap;
 
-	
+public:
 	UPROPERTY(EditDefaultsOnly,Category="Common")
 	TSubclassOf<UGameplayEffect> SecondaryAttributeEffect;
 
 	UPROPERTY(EditDefaultsOnly,Category="Common")
 	TSubclassOf<UGameplayEffect> VitalAttributeEffect;
 
-public:
+
 	TSubclassOf<UGameplayEffect> GetClassPrimaryEffect(const ECharacterClass& CharacterClass);
 };
 

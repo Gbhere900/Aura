@@ -9,6 +9,7 @@
 #include "UI/WidgetController/OverlayWidgetController.h"
 #include "AuraAbilitySystermLibrary.generated.h"
 
+enum class ECharacterClass : uint8;
 /**
  * 
  */
@@ -17,9 +18,13 @@ class AURA_API UAuraAbilitySystermLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 
+public:
 	UFUNCTION(BlueprintPure,Category="AbilitySystemLibrary|OverlayWidgetController")
 	static const UOverlayWidgetController* GetOverlayWidgetController(const UObject* WorldContext);
 
 	UFUNCTION(BlueprintPure,Category="AbilitySystemLibrary|AttributeMenuWidgetController")
 	static UAttributeMenuWidgetController* GetAttributeSetWidgetController(const UObject* WorldContext);
+
+	UFUNCTION(BlueprintCallable,Category="AbilitySystemLibrary|CharacterClass")
+	static void InitializeCharacterAttributeByClass(const UObject* WorldContextObject, const ECharacterClass& CharacterClass,const int& Level, UAbilitySystemComponent* ASC);
 };

@@ -45,7 +45,7 @@ protected:
 	TSubclassOf<UGameplayEffect> InitialVitalGamePlayEffect;
 
 	void virtual InitAbilityActorInfo();
-	void InitialAttributeSet();
+	void virtual InitialAttributeSet();
 	void ApplyGameplayEffectSpecToSelf(const TSubclassOf<UGameplayEffect> GameplayEffect,const int Level) const;
 
 private:
