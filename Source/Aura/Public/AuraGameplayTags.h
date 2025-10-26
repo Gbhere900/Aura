@@ -46,6 +46,11 @@ public:
 	FGameplayTag InputTag_3;
 	FGameplayTag InputTag_4;
 
+	/*
+	 *else
+	 **/
+	FGameplayTag Damage;
+
 
 	
 protected:

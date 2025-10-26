@@ -49,6 +49,22 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMo
 	FEffectProperties EffectProperties;
 	SetEffectProperties(Data,EffectProperties);
 
+	if (Data.EvaluatedData.Attribute == GetComingDamageAttribute())
+	{
+		float ComingDamageValue = GetComingDamage();
+		SetComingDamage(0.f);
+		if (ComingDamageValue > 0.f)
+		{
+			SetHealth(GetHealth() - ComingDamageValue);
+			if (GetHealth() <= 0.f)
+			{
+				UE_LOG(LogTemp,Warning,TEXT("%s Die"),*GetActorInfo()->AvatarActor->GetName());
+			}
+		}
+		
+		
+	}
+	
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
 		SetHealth(FMath::Clamp(GetHealth(),0.f,GetMaxHealth()));
@@ -58,8 +74,6 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMo
 			                                 *GetActorInfo()->AvatarActor->GetName(), GetHealth()));
 		
 		UE_LOG(LogTemp,Warning,TEXT("Health changed on %s ,health = %f"), *GetActorInfo()->AvatarActor->GetName(),GetHealth());
-
-
 	}
 
 	if (Data.EvaluatedData.Attribute == GetManaAttribute())

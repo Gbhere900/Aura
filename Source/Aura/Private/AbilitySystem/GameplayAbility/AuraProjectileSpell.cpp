@@ -3,7 +3,10 @@
 
 #include "AbilitySystem/GameplayAbility/AuraProjectileSpell.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "AuraGameplayTags.h"
+#include "AbilitySystem/AuraAbilitySystermLibrary.h"
 #include "AbilitySystem/CombatInterface.h"
 #include "Actor/AuraProjectile.h"
 #include "Misc/LowLevelTestAdapter.h"
@@ -39,7 +42,9 @@ void UAuraProjectileSpell::SpawnFireBLot(FVector TargetPosition)
 	AuraProjectile->SetActorRotation(Direction);
 
 	UAbilitySystemComponent* SourceASC = GetAbilitySystemComponentFromActorInfo();
-	AuraProjectile->GameplayEffectSpec = SourceASC->MakeOutgoingSpec(GameplayEffect,GetAbilityLevel(),SourceASC->MakeEffectContext());
+	FGameplayEffectSpecHandle GameplayEffectSpecHandle = SourceASC->MakeOutgoingSpec(GameplayEffect,GetAbilityLevel(),SourceASC->MakeEffectContext());
+	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(GameplayEffectSpecHandle,FAuraGameplayTags::Get().Damage,50);
+	AuraProjectile->GameplayEffectSpec = GameplayEffectSpecHandle;
 	
 	AuraProjectile->FinishSpawning(SpawnTransform);
 }

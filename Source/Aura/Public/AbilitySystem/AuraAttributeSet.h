@@ -143,14 +143,17 @@ public:
 	FGameplayAttributeData Health;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,Health);
 	
-
-
 	UPROPERTY(BlueprintReadOnly,ReplicatedUsing= OnRep_Mana,Category = "Vital Attribute")
 	FGameplayAttributeData Mana;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,Mana);
 
-
-
+	/*
+	 *MetaAttribute
+	 */
+	UPROPERTY(BlueprintReadOnly)
+	FGameplayAttributeData ComingDamage;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,ComingDamage);
+	
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	void SetEffectProperties( const FGameplayEffectModCallbackData& Data,FEffectProperties& Props);
 
