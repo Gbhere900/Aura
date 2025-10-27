@@ -31,6 +31,8 @@ public:
 
 	UFUNCTION(BlueprintCallable,BlueprintImplementableEvent)
 	void FaceTarget(FVector Location);
+	
+	virtual void Die() = 0;
 };
 
 //这个类是我自己写的，不保证合理

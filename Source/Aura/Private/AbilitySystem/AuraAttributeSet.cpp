@@ -8,6 +8,7 @@
 #include "AuraGameplayTags.h"
 #include "Net/UnrealNetwork.h"
 #include "GameplayEffectExtension.h"
+#include "AbilitySystem/CombatInterface.h"
 #include "GameFramework/Character.h"
 
 FEffectProperties::FEffectProperties()
@@ -58,7 +59,11 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMo
 			SetHealth(GetHealth() - ComingDamageValue);
 			if (GetHealth() <= 0.f)
 			{
-				UE_LOG(LogTemp,Warning,TEXT("%s Die"),*GetActorInfo()->AvatarActor->GetName());
+				if (ICombatInterface* CombatInterface = Cast<ICombatInterface>(GetActorInfo()->AvatarActor))
+				{
+					CombatInterface->Die();
+				}
+				
 			}
 			else
 			{

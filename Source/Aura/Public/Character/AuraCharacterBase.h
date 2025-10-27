@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
 #include "GameplayEffect.h"
+#include "AbilitySystem/CombatInterface.h"
 #include "AuraCharacterBase.generated.h"
 
 class UAttributeSet;
@@ -14,7 +15,7 @@ class UAuraAbilitySystemComponent;
 class UAuraAttributeSet;
 
 UCLASS(Abstract)
-class AURA_API AAuraCharacterBase : public ACharacter,public IAbilitySystemInterface
+class AURA_API AAuraCharacterBase : public ACharacter,public IAbilitySystemInterface,public ICombatInterface
 {
 	GENERATED_BODY()
 
@@ -47,6 +48,15 @@ protected:
 	void virtual InitAbilityActorInfo();
 	void virtual InitialAttributeSet();
 	void ApplyGameplayEffectSpecToSelf(const TSubclassOf<UGameplayEffect> GameplayEffect,const int Level) const;
+
+	virtual FTransform GetSocketTransform() override;
+
+	virtual int GetLevel() override;
+
+	virtual void Die() override;
+
+	UFUNCTION(NetMulticast,Reliable)
+	void MulticastHandleDeath();
 
 private:
 	UPROPERTY(EditAnywhere,Category="GameplayAbilities")
