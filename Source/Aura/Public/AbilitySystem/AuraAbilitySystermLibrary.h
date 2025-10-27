@@ -27,4 +27,7 @@ public:
 
 	UFUNCTION(BlueprintCallable,Category="AbilitySystemLibrary|CharacterClass")
 	static void InitializeCharacterAttributeByClass(const UObject* WorldContextObject, const ECharacterClass& CharacterClass,const int& Level, UAbilitySystemComponent* ASC);
+
+	UFUNCTION(BlueprintCallable,Category="AbilitySystemLibrary|CharacterClass")
+	static void InitializeGameplayAbility(const UObject* WorldContextObject,UAbilitySystemComponent* ASC);
 };

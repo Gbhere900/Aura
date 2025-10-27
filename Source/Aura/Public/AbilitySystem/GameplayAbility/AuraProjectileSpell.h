@@ -27,5 +27,8 @@ class AURA_API UAuraProjectileSpell : public UAuraGameplayAbility
 	UFUNCTION(BlueprintCallable)
 	void SpawnFireBLot(FVector TargetPosition);
 
+	UPROPERTY(EditDefaultsOnly,Category="Damage")
+	FScalableFloat ScalableDamage;
+
 	
 };

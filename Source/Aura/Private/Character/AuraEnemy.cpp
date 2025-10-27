@@ -3,12 +3,14 @@
 
 #include "Character/AuraEnemy.h"
 
+#include "AuraGameplayTags.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraAbilitySystermLibrary.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/WidgetComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 void AAuraEnemy::HighlightEnemy()
 {
@@ -59,6 +61,12 @@ void AAuraEnemy::BeginPlay()
 
 	BindCallBackToDependences();
 	BoardcastInitialAttribute();
+
+	AbilitySystemComponent->RegisterGameplayTagEvent(FAuraGameplayTags::Get().HitReact,EGameplayTagEventType::NewOrRemoved).AddUObject(
+		this,
+		&AAuraEnemy::HitReactEvent);
+
+	GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
 }
 
 void AAuraEnemy::InitAbilityActorInfo()
@@ -67,6 +75,7 @@ void AAuraEnemy::InitAbilityActorInfo()
 	AbilitySystemComponent->InitAbilityActorInfo(this,this);
 
 	InitialAttributeSet();
+	InitializeGameplayAbility();
 }
 
 void AAuraEnemy::InitialAttributeSet()
@@ -77,6 +86,15 @@ void AAuraEnemy::InitialAttributeSet()
 	}
 
 	UAuraAbilitySystermLibrary::InitializeCharacterAttributeByClass(this,CharacterClass,Level,AbilitySystemComponent);
+}
+
+void AAuraEnemy::InitializeGameplayAbility()
+{
+	if (!HasAuthority())
+	{
+		return;
+	}
+	UAuraAbilitySystermLibrary::InitializeGameplayAbility(this,AbilitySystemComponent);
 }
 
 void AAuraEnemy::BoardcastInitialAttribute()
@@ -110,6 +128,26 @@ void AAuraEnemy::BindCallBackToDependences()
 
 	}
 }
+
+void AAuraEnemy::HitReactEvent(const FGameplayTag GameplayTag, int32 Count)
+{
+	bool bIsHit = Count > 0;
+	if (bIsHit)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = 0;
+	}
+	else
+	{
+		GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
+	}
+}
+
+UAnimMontage* AAuraEnemy::GetHitReactAnimMontage_Implementation()
+{
+	return HitReactAnimMontage;	
+}
+
+
 
 
 

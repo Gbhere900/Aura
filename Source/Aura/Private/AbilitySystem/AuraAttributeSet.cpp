@@ -60,6 +60,12 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMo
 			{
 				UE_LOG(LogTemp,Warning,TEXT("%s Die"),*GetActorInfo()->AvatarActor->GetName());
 			}
+			else
+			{
+				FGameplayTagContainer GameplayTagContainer;
+				GameplayTagContainer.AddTag(FAuraGameplayTags::Get().HitReact);
+				EffectProperties.TargetASC->TryActivateAbilitiesByTag(GameplayTagContainer);
+			}
 		}
 		
 		

@@ -6,6 +6,7 @@
 #include "Engine/DataAsset.h"
 #include "CharacterClassInfo.generated.h"
 
+class UGameplayAbility;
 class UGameplayEffect;
 /**
  * 
@@ -41,7 +42,9 @@ public:
 	UPROPERTY(EditDefaultsOnly,Category="Common")
 	TSubclassOf<UGameplayEffect> VitalAttributeEffect;
 
-
+	UPROPERTY(EditDefaultsOnly,Category="Common")
+	TArray<TSubclassOf<UGameplayAbility>> CommonGameplayAbility;  
+	
 	TSubclassOf<UGameplayEffect> GetClassPrimaryEffect(const ECharacterClass& CharacterClass);
 };
 

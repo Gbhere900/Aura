@@ -50,6 +50,7 @@ public:
 	 *else
 	 **/
 	FGameplayTag Damage;
+	FGameplayTag HitReact;
 
 
 	

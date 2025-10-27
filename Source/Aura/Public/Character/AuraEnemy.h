@@ -57,9 +57,22 @@ protected:
 
 	virtual void InitialAttributeSet() override;
 
+	void InitializeGameplayAbility();
+
 	void BoardcastInitialAttribute() ;
-
-
+	
 	void BindCallBackToDependences();
 
+	void HitReactEvent(const FGameplayTag GameplayTag, int32 Count);
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	float MaxWalkSpeed = 250;
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	UAnimMontage* HitReactAnimMontage;
+
+	UFUNCTION(BlueprintCallable)
+	virtual UAnimMontage* GetHitReactAnimMontage_Implementation() override;
+
+	
 };

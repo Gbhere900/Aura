@@ -26,6 +26,9 @@ public:
 
 	virtual FTransform GetSocketTransform() = 0;
 
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
+	UAnimMontage* GetHitReactAnimMontage();
+
 	UFUNCTION(BlueprintCallable,BlueprintImplementableEvent)
 	void FaceTarget(FVector Location);
 };
