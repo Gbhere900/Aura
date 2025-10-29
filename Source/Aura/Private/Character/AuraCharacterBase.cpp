@@ -87,6 +87,26 @@ void AAuraCharacterBase::Die()
 	
 }
 
+void AAuraCharacterBase::Dissolve()
+{
+    if(IsValid(MeshMaterialInstance))
+	{
+		TObjectPtr<UMaterialInstanceDynamic> MeshMaterialInstanceDynamic = UMaterialInstanceDynamic::Create(MeshMaterialInstance,this);
+		GetMesh()->SetMaterial(0, MeshMaterialInstanceDynamic);
+		BeginMeshDissolveTimeline(MeshMaterialInstanceDynamic);
+	}
+
+	
+	if(IsValid(WeaponMaterialInstance))
+	{
+		TObjectPtr<UMaterialInstanceDynamic> WeaponMaterialInstanceDynamic = UMaterialInstanceDynamic::Create(WeaponMaterialInstance,this);
+		Weapon->SetMaterial(0, WeaponMaterialInstanceDynamic);
+		BeginWeaponDissolveTimeline(WeaponMaterialInstanceDynamic);
+	}
+}
+
+
+
 void AAuraCharacterBase::MulticastHandleDeath_Implementation()
 {
 	Weapon->SetSimulatePhysics(true);
@@ -102,6 +122,8 @@ void AAuraCharacterBase::MulticastHandleDeath_Implementation()
 	GetMesh()->SetCollisionResponseToChannel(ECC_WorldStatic,ECR_Block);
 
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	Dissolve();
 }
 
 

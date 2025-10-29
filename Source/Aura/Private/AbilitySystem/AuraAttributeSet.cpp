@@ -10,11 +10,14 @@
 #include "GameplayEffectExtension.h"
 #include "AbilitySystem/CombatInterface.h"
 #include "GameFramework/Character.h"
+#include "Player/AuraPlayerController.h"
 
 FEffectProperties::FEffectProperties()
 {
 	
 }
+
+
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
@@ -71,6 +74,8 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMo
 				GameplayTagContainer.AddTag(FAuraGameplayTags::Get().HitReact);
 				EffectProperties.TargetASC->TryActivateAbilitiesByTag(GameplayTagContainer);
 			}
+
+			TryShowDamageText(EffectProperties,ComingDamageValue);
 		}
 		
 		
@@ -93,6 +98,23 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMo
 	}
 	
 }
+
+bool UAuraAttributeSet::TryShowDamageText(const FEffectProperties& EffectProperties,const float& Damage)
+{
+	if (EffectProperties.TargetAvatarActor != EffectProperties.SourceAvatarActor)
+	{
+		if (EffectProperties.SourceController != nullptr)
+		{
+			if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(EffectProperties.SourceController))
+			{
+				AuraPlayerController->ShowDamageText(Damage,EffectProperties.TargetAvatarActor);
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 
 void UAuraAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
 {

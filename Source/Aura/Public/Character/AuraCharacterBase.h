@@ -45,6 +45,12 @@ protected:
 	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category="Attribute")
 	TSubclassOf<UGameplayEffect> InitialVitalGamePlayEffect;
 
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	TObjectPtr<UMaterialInstance> MeshMaterialInstance;
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	TObjectPtr<UMaterialInstance> WeaponMaterialInstance;
+
 	void virtual InitAbilityActorInfo();
 	void virtual InitialAttributeSet();
 	void ApplyGameplayEffectSpecToSelf(const TSubclassOf<UGameplayEffect> GameplayEffect,const int Level) const;
@@ -57,6 +63,12 @@ protected:
 
 	UFUNCTION(NetMulticast,Reliable)
 	void MulticastHandleDeath();
+
+	void Dissolve();
+	UFUNCTION(BlueprintImplementableEvent)
+	void BeginMeshDissolveTimeline(UMaterialInstanceDynamic* MaterialInstanceDynamic);
+	UFUNCTION(BlueprintImplementableEvent)
+	void BeginWeaponDissolveTimeline(UMaterialInstanceDynamic* MaterialInstanceDynamic);
 
 private:
 	UPROPERTY(EditAnywhere,Category="GameplayAbilities")

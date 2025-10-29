@@ -8,6 +8,7 @@
 #include "GameFramework/PlayerController.h"
 #include "AuraPlayerController.generated.h"
 
+class UDamageTextComponent;
 class UAuraAbilitySystemComponent;
 class UAuraInputConfig;
 class IEnemyInterface;
@@ -24,6 +25,9 @@ class AURA_API AAuraPlayerController : public APlayerController
 	GENERATED_BODY()
 public:
 	AAuraPlayerController();
+
+	UFUNCTION(Client,Reliable)
+	void ShowDamageText(float Damage,AActor* TargetObject);
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
@@ -33,7 +37,10 @@ protected:
 	TObjectPtr<UAuraAbilitySystemComponent> GetAuraAbilitySystemComponent();
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
-	UAuraInputConfig* AuraInputConfig; 
+	UAuraInputConfig* AuraInputConfig;
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	TSubclassOf<UDamageTextComponent> DamageTextComponentSubClass;
 	
 private:
 	UPROPERTY(EditAnywhere,Category="Input")

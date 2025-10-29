@@ -59,6 +59,10 @@ UCLASS()
 class AURA_API UAuraAttributeSet : public UAttributeSet
 {
 	GENERATED_BODY()
+
+
+protected:
+	bool TryShowDamageText(const FEffectProperties& EffectProperties,const float& Damage);
 public:
 	UAuraAttributeSet();
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;

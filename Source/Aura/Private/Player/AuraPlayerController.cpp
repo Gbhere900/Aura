@@ -13,6 +13,7 @@
 #include "AbilitySystem/AuraAbilitySystermLibrary.h"
 #include "Interaction/EnemyInterface.h"
 #include "Player/AuraEnhancedInputComponent.h"
+#include "UI/DamageTextComponent/DamageTextComponent.h"
 
 AAuraPlayerController::AAuraPlayerController()
 {
@@ -20,6 +21,17 @@ AAuraPlayerController::AAuraPlayerController()
 
 	SplineComponent = CreateDefaultSubobject<USplineComponent>(TEXT("SplineComponent"));
 }
+
+void AAuraPlayerController::ShowDamageText_Implementation(float Damage, AActor* TargetObject)
+{
+	const TObjectPtr<UDamageTextComponent> DamageTextComponent = NewObject<UDamageTextComponent>(TargetObject,DamageTextComponentSubClass);
+	DamageTextComponent->RegisterComponent();
+	DamageTextComponent->SetDamageText(Damage);
+	DamageTextComponent->AttachToComponent(TargetObject->GetRootComponent(),FAttachmentTransformRules::KeepRelativeTransform);
+	DamageTextComponent->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+	GEngine->AddOnScreenDebugMessage(-1,5,FColor::Red,DamageTextComponent->GetComponentLocation().ToString());
+}
+
 
 void AAuraPlayerController::Tick(float DeltaTime)
 {
