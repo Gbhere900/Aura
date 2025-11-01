@@ -9,6 +9,7 @@
 #include "UI/WidgetController/OverlayWidgetController.h"
 #include "AuraAbilitySystermLibrary.generated.h"
 
+class UCharacterClassInfo;
 enum class ECharacterClass : uint8;
 /**
  * 
@@ -30,4 +31,6 @@ public:
 
 	UFUNCTION(BlueprintCallable,Category="AbilitySystemLibrary|CharacterClass")
 	static void InitializeGameplayAbility(const UObject* WorldContextObject,UAbilitySystemComponent* ASC);
+
+	static UCharacterClassInfo* GetCharacterClassInfo(const UObject* WorldContextObject);
 };

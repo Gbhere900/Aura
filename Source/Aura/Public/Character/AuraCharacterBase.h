@@ -58,6 +58,10 @@ protected:
 	virtual FTransform GetSocketTransform() override;
 
 	virtual int GetLevel() override;
+	
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="CharacterClassDefault")
+	int Level = 1;
+
 
 	virtual void Die() override;
 

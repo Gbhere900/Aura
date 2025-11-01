@@ -43,7 +43,10 @@ public:
 	TSubclassOf<UGameplayEffect> VitalAttributeEffect;
 
 	UPROPERTY(EditDefaultsOnly,Category="Common")
-	TArray<TSubclassOf<UGameplayAbility>> CommonGameplayAbility;  
+	TArray<TSubclassOf<UGameplayAbility>> CommonGameplayAbility;
+
+	UPROPERTY(EditDefaultsOnly,Category="Common|Coefficient")
+	TObjectPtr<UCurveTable> DamageCoefficientCurveTable;
 	
 	TSubclassOf<UGameplayEffect> GetClassPrimaryEffect(const ECharacterClass& CharacterClass);
 };

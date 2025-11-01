@@ -24,7 +24,7 @@ void AAuraEnemy::UnHighLightEnemy()
 
 int AAuraEnemy::GetLevel()
 {
-	return 1;
+	return Level;
 }
 
 FTransform AAuraEnemy::GetSocketTransform()

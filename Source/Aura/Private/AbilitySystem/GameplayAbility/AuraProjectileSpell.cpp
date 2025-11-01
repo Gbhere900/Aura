@@ -31,7 +31,8 @@ void UAuraProjectileSpell::SpawnFireBLot(FVector TargetPosition)
 	}
 
 	FTransform SpawnTransform = Cast<ICombatInterface>(GetAvatarActorFromActorInfo())->GetSocketTransform();
-	
+
+	//SpawnActorDeferred是什么
 	AAuraProjectile* AuraProjectile = GetWorld()->SpawnActorDeferred<AAuraProjectile>(AuraProjectileClass,SpawnTransform,
 		GetAvatarActorFromActorInfo(),
 		Cast<APawn>(GetAvatarActorFromActorInfo()),

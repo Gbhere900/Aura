@@ -44,7 +44,7 @@ void AAuraCharacter::OnRep_PlayerState()
 
 int AAuraCharacter::GetLevel()
 {
-	return 1;
+	return Level;
 }
 
 

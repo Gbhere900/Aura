@@ -49,9 +49,7 @@ protected:
 	UPROPERTY(BlueprintReadWrite,EditAnywhere)
 	TObjectPtr<UWidgetComponent> EnemyHealthBarWidgetComponent;
 
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category="CharacterClassDefault")
-	int Level = 1;
-
+	
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category="CharacterClassDefault")
 	ECharacterClass CharacterClass = ECharacterClass::Warrior;
 
