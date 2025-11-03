@@ -109,7 +109,6 @@ void AAuraPlayerController::GameplayAbilityPressedFunc(FGameplayTag GameplayTag)
 		bAutoRunning = false;
 	}
 	
-	GEngine->AddOnScreenDebugMessage(1,3.f,FColor::Red,GameplayTag.ToString());
 }
 
 void AAuraPlayerController::GameplayAbilityHeldFunc(FGameplayTag GameplayTag)

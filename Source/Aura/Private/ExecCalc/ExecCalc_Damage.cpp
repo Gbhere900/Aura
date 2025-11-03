@@ -12,7 +12,7 @@
 #include "AbilitySystem/Data/CharacterClassInfo.h"
 
 //这里有一定要用宏定义的必要吗，其实可以手写
-struct AuraDamageStatice
+struct FAuraDamageStatics
 {
 	DECLARE_ATTRIBUTE_CAPTUREDEF(BlockChance)
 	DECLARE_ATTRIBUTE_CAPTUREDEF(Armor)
@@ -20,36 +20,61 @@ struct AuraDamageStatice
 	DECLARE_ATTRIBUTE_CAPTUREDEF(CriticalHitChance)
 	DECLARE_ATTRIBUTE_CAPTUREDEF(CriticalHitDamage)
 	DECLARE_ATTRIBUTE_CAPTUREDEF(CriticalHitResistance)
-	
-	AuraDamageStatice()
+
+	DECLARE_ATTRIBUTE_CAPTUREDEF(FireResistance)
+	DECLARE_ATTRIBUTE_CAPTUREDEF(LighteningResistance)
+	DECLARE_ATTRIBUTE_CAPTUREDEF(ArcaneResistance)
+	DECLARE_ATTRIBUTE_CAPTUREDEF(PhysicsResistance)
+
+	TMap<FGameplayTag, FGameplayEffectAttributeCaptureDefinition> TagToResistance;
+	FAuraDamageStatics()
 	{
-		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet,BlockChance,Target,true);
-		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet,Armor,Target,true);
-		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet,ArmorPenetration,Source,true);
-		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet,CriticalHitChance,Source,true);
-		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet,CriticalHitDamage,Source,true);
-		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet,CriticalHitResistance,Target,true);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet,BlockChance,Target,false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet,Armor,Target,false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet,ArmorPenetration,Source,false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet,CriticalHitChance,Source,false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet,CriticalHitDamage,Source,false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet,CriticalHitResistance,Target,false);
+
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet,FireResistance,Target,false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet,LighteningResistance,Target,false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet,ArcaneResistance,Target,false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UAuraAttributeSet,PhysicsResistance,Target,false);
+
+		
+		TagToResistance.Add(FAuraGameplayTags::Get().Attributes_Secondary_FireResistance,FireResistanceDef);
+		TagToResistance.Add(FAuraGameplayTags::Get().Attributes_Secondary_LighteningResistance,LighteningResistanceDef);
+		TagToResistance.Add(FAuraGameplayTags::Get().Attributes_Secondary_ArcaneResistance,ArcaneResistanceDef);
+		TagToResistance.Add(FAuraGameplayTags::Get().Attributes_Secondary_PhysicsResistance,PhysicsResistanceDef);
 	}
 };
 
 //这里一定要是Static吗？难道类外部也要访问？
 //为什么要用函数来获得捕获的属性？直接上面的调用捕获属性变量不行吗
-static AuraDamageStatice GetDamageStatic()
+static FAuraDamageStatics GetDamageStatic()
 {
 	//函数中定义的static变量会在第一次调用函数时创建并且保持全局的生命周期
-	static AuraDamageStatice DamageStatic;
+	static FAuraDamageStatics DamageStatic;
 	return DamageStatic;
 }
 
 UExecCalc_Damage::UExecCalc_Damage()
 {
 	//要记得加上下面的函数
+	FAuraGameplayTags::Get().InitializeNativeGameplayTags();
 	RelevantAttributesToCapture.Add(GetDamageStatic().BlockChanceDef);
 	RelevantAttributesToCapture.Add(GetDamageStatic().ArmorDef);
 	RelevantAttributesToCapture.Add(GetDamageStatic().ArmorPenetrationDef);
 	RelevantAttributesToCapture.Add(GetDamageStatic().CriticalHitChanceDef);
 	RelevantAttributesToCapture.Add(GetDamageStatic().CriticalHitDamageDef);
 	RelevantAttributesToCapture.Add(GetDamageStatic().CriticalHitResistanceDef);
+
+	RelevantAttributesToCapture.Add(GetDamageStatic().FireResistanceDef);
+	RelevantAttributesToCapture.Add(GetDamageStatic().LighteningResistanceDef);
+	RelevantAttributesToCapture.Add(GetDamageStatic().ArcaneResistanceDef);
+	RelevantAttributesToCapture.Add(GetDamageStatic().PhysicsResistanceDef);
+
+
 }
 
 void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
@@ -92,7 +117,15 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	float Damage = 0;
 	for (auto& pair : FAuraGameplayTags::Get().DamageTypeToResistance)
 	{
-		Damage += EffectSpec.GetSetByCallerMagnitude(pair.Key);
+		TMap<FGameplayTag, FGameplayEffectAttributeCaptureDefinition> TagToResistance = GetDamageStatic().TagToResistance;
+		checkf(GetDamageStatic().TagToResistance.Contains(pair.Value),TEXT("Target"));
+		float TempDamage = EffectSpec.GetSetByCallerMagnitude(pair.Key);
+		float TempResistance = 0;
+		FGameplayEffectAttributeCaptureDefinition DamageCapture = GetDamageStatic().TagToResistance[pair.Value];
+		ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageCapture,EvalParams,TempResistance);
+
+		TempDamage *= (1 - TempResistance/100);
+		Damage += TempDamage;
 	}
 	
 	

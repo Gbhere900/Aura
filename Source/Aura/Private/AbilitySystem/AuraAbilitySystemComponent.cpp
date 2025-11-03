@@ -17,7 +17,7 @@ void UAuraAbilitySystemComponent::BeginPlay()
 void UAuraAbilitySystemComponent::AbilityActorInfoSet()
 {
 	OnGameplayEffectAppliedDelegateToTarget.AddUObject(this,&UAuraAbilitySystemComponent::ClientEffectApplied);
-	GEngine->AddOnScreenDebugMessage(-1,10,FColor::Orange,FAuraGameplayTags::Get().Attributes_Secondary_Armor.ToString());
+	//GEngine->AddOnScreenDebugMessage(-1,10,FColor::Orange,FAuraGameplayTags::Get().Attributes_Secondary_Armor.ToString());
 }
 
 void UAuraAbilitySystemComponent::GameplayAbilityHeldFunc(FGameplayTag GameplayTag)

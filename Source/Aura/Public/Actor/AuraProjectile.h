@@ -54,6 +54,7 @@ private:
 	UPROPERTY(EditDefaultsOnly,Category="Particle")
 	TObjectPtr<UNiagaraSystem> HitParticle;
 
+	UPROPERTY(EditDefaultsOnly,Category="Audio")
 	TObjectPtr<UAudioComponent> LoopingAudioComponent;
 	
 	

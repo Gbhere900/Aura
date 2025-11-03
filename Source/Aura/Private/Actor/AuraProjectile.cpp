@@ -55,6 +55,10 @@ void AAuraProjectile::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedCompon
 	{
 		return;
 	}
+	if (OtherActor == GameplayEffectSpec.Data->GetEffectContext().GetEffectCauser())
+	{
+		return;
+	}
 	if (UAbilitySystemComponent* ASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OtherActor))
 	{
 		ASC->ApplyGameplayEffectSpecToSelf(*GameplayEffectSpec.Data);
@@ -67,7 +71,11 @@ void AAuraProjectile::Destroyed()
 	Super::Destroyed();
 	//if (!HasAuthority())
 	//{
+	if (LoopingAudioComponent)
+	{
 		LoopingAudioComponent->Stop();
+	}
+		
 		UGameplayStatics::PlaySoundAtLocation(this,HitSound,GetActorLocation(),FRotator::ZeroRotator);
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this,HitParticle,GetActorLocation(),FRotator::ZeroRotator);
 	//}
