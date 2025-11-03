@@ -22,14 +22,14 @@ AAuraPlayerController::AAuraPlayerController()
 	SplineComponent = CreateDefaultSubobject<USplineComponent>(TEXT("SplineComponent"));
 }
 
-void AAuraPlayerController::ShowDamageText_Implementation(float Damage, AActor* TargetObject)
+void AAuraPlayerController::ShowDamageText_Implementation(float Damage, AActor* TargetObject,bool bIsCritical,bool bIsBlocked)
 {
 	const TObjectPtr<UDamageTextComponent> DamageTextComponent = NewObject<UDamageTextComponent>(TargetObject,DamageTextComponentSubClass);
 	DamageTextComponent->RegisterComponent();
-	DamageTextComponent->SetDamageText(Damage);
+	DamageTextComponent->SetDamageText(Damage,bIsCritical,bIsBlocked);
 	DamageTextComponent->AttachToComponent(TargetObject->GetRootComponent(),FAttachmentTransformRules::KeepRelativeTransform);
 	DamageTextComponent->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
-	GEngine->AddOnScreenDebugMessage(-1,5,FColor::Red,DamageTextComponent->GetComponentLocation().ToString());
+
 }
 
 

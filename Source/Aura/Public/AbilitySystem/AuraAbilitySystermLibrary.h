@@ -9,6 +9,8 @@
 #include "UI/WidgetController/OverlayWidgetController.h"
 #include "AuraAbilitySystermLibrary.generated.h"
 
+struct FGameplayEffectContextHandle;
+struct FGameplayEffectContext;
 class UCharacterClassInfo;
 enum class ECharacterClass : uint8;
 /**
@@ -33,4 +35,20 @@ public:
 	static void InitializeGameplayAbility(const UObject* WorldContextObject,UAbilitySystemComponent* ASC);
 
 	static UCharacterClassInfo* GetCharacterClassInfo(const UObject* WorldContextObject);
+
+	/*
+	 *下面这四个函数有必要在函数库里写一遍吗，感觉其实没必要
+	 */
+	
+	UFUNCTION(BlueprintPure,Category="AbilitySystemLibrary|GameEffectContext")
+	static bool GetIsBlocked(const FGameplayEffectContextHandle& GameplayEffectContextHandle);
+
+	UFUNCTION(BlueprintPure,Category="AbilitySystemLibrary|GameEffectContext")
+	static bool GetIsCriticalHit(const FGameplayEffectContextHandle& GameplayEffectContextHandle);
+
+	UFUNCTION(BlueprintCallable,Category="AbilitySystemLibrary|GameEffectContext")
+	static void SetIsCriticalHit(FGameplayEffectContextHandle& GameplayEffectContextHandle,bool b);
+
+	UFUNCTION(BlueprintCallable,Category="AbilitySystemLibrary|GameEffectContext")
+	static void SetIsBlocked(FGameplayEffectContextHandle& GameplayEffectContextHandle,bool b);
 };

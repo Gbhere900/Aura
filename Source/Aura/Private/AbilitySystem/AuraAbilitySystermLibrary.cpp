@@ -3,6 +3,7 @@
 
 #include "AbilitySystem/AuraAbilitySystermLibrary.h"
 
+#include "AuraAbilityTypes.h"
 #include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "Game/AuraGameModeBase.h"
 #include "Kismet/GameplayStatics.h"
@@ -86,5 +87,53 @@ UCharacterClassInfo* UAuraAbilitySystermLibrary::GetCharacterClassInfo(const UOb
 	}
 	return nullptr;
 }
+
+
+
+bool UAuraAbilitySystermLibrary::GetIsBlocked(const FGameplayEffectContextHandle& GameplayEffectContextHandle)
+{
+	//为什么下面要加static_cast 和*
+	if (const FAuraGameplayEffectContext* AuraGameplayEffectContext = static_cast<const FAuraGameplayEffectContext*>(GameplayEffectContextHandle.Get()))
+	{
+		return AuraGameplayEffectContext->IsBlockHit();
+	}
+	return false;
+	
+}
+
+
+
+bool UAuraAbilitySystermLibrary::GetIsCriticalHit(const FGameplayEffectContextHandle& GameplayEffectContextHandle)
+{
+	//为什么下面要加static_cast 和*
+	if (const FAuraGameplayEffectContext* AuraGameplayEffectContext = static_cast<const FAuraGameplayEffectContext*>(GameplayEffectContextHandle.Get()))
+	{
+		return AuraGameplayEffectContext->IsCriticalHit();
+	}
+	return false;
+}
+
+//给蓝图用的SetIsCriticalHit/SetIsBlocked真的有必要吗？？
+void UAuraAbilitySystermLibrary::SetIsCriticalHit(FGameplayEffectContextHandle& GameplayEffectContextHandle,bool b)
+{
+	//为什么下面要加static_cast 和*
+	if (FAuraGameplayEffectContext* AuraGameplayEffectContext = static_cast<FAuraGameplayEffectContext*>(GameplayEffectContextHandle.Get()))
+	{
+		AuraGameplayEffectContext->SetIsCriticalHit(b);
+	}
+}
+
+void UAuraAbilitySystermLibrary::SetIsBlocked(FGameplayEffectContextHandle& GameplayEffectContextHandle, bool b)
+{
+	//为什么下面要加static_cast 和*
+	if (FAuraGameplayEffectContext* AuraGameplayEffectContext = static_cast<FAuraGameplayEffectContext*>(GameplayEffectContextHandle.Get()))
+	{
+		AuraGameplayEffectContext->SetIsBlockHit(b);
+	}
+}
+
+
+
+
 
 

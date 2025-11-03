@@ -4,6 +4,7 @@
 #include "ExecCalc/ExecCalc_Damage.h"
 
 #include "AbilitySystemComponent.h"
+#include "AuraAbilityTypes.h"
 #include "AuraGameplayTags.h"
 #include "AbilitySystem/AuraAbilitySystermLibrary.h"
 #include "AbilitySystem/AuraAttributeSet.h"
@@ -89,12 +90,19 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 
 	//为什么Damage不用捕获智力，力量等属性获得？而是靠创建Spec时绑定的Tag到数值的映射？
 	float Damage = 0;
-	Damage = EffectSpec.GetSetByCallerMagnitude(FAuraGameplayTags::Get().Damage);
+	for (auto& pair : FAuraGameplayTags::Get().DamageTypeToResistance)
+	{
+		Damage += EffectSpec.GetSetByCallerMagnitude(pair.Key);
+	}
+	
 	
 	float BlockChance = 0;
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(GetDamageStatic().BlockChanceDef,EvalParams,BlockChance);
 	BlockChance = FMath::Max<float>(0,BlockChance);
-	bool bIsBlocked = FMath::RandRange(1,100) <= BlockChance;	
+	bool bIsBlocked = FMath::RandRange(1,100) <= BlockChance;
+	
+	FGameplayEffectContextHandle GameplayEffectContextHandle = EffectSpec.GetContext();
+	UAuraAbilitySystermLibrary::SetIsBlocked(GameplayEffectContextHandle,bIsBlocked);
 	Damage = bIsBlocked ? Damage * BlockCoefficient : Damage;
 
 	float Armor  = 0;
@@ -124,6 +132,7 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 
 	float ValidCriticalHitChance = CriticalHitChance * (100 - CriticalHitResistance * CriticalHitResistanceCoefficient)/100;
 	bool bIsCritical = FMath::RandRange(1,100) <= ValidCriticalHitChance;
+	UAuraAbilitySystermLibrary::SetIsCriticalHit(GameplayEffectContextHandle,bIsCritical);
 	Damage = bIsCritical ? Damage * (CriticalHitDamageCoefficient + CriticalHitDamage/100): Damage;
 		
 	FGameplayModifierEvaluatedData GameplayModifierEvaluatedData(UAuraAttributeSet::GetComingDamageAttribute(),EGameplayModOp::Override,Damage);

@@ -43,10 +43,15 @@ void UAuraProjectileSpell::SpawnFireBLot(FVector TargetPosition)
 	AuraProjectile->SetActorRotation(Direction);
 
 	UAbilitySystemComponent* SourceASC = GetAbilitySystemComponentFromActorInfo();
+
 	FGameplayEffectSpecHandle GameplayEffectSpecHandle = SourceASC->MakeOutgoingSpec(GameplayEffect,GetAbilityLevel(),SourceASC->MakeEffectContext());
-	const float DamageValue = ScalableDamage.GetValueAtLevel(GetAbilityLevel());
-	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(GameplayEffectSpecHandle,FAuraGameplayTags::Get().Damage,DamageValue);
-	AuraProjectile->GameplayEffectSpec = GameplayEffectSpecHandle;
+	for (auto& pair : DamageTypes)
+	{
+		const float DamageValue = pair.Value.GetValueAtLevel(GetAbilityLevel());
+		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(GameplayEffectSpecHandle,pair.Key,DamageValue);
+	}
+
 	
+	AuraProjectile->GameplayEffectSpec = GameplayEffectSpecHandle;
 	AuraProjectile->FinishSpawning(SpawnTransform);
 }

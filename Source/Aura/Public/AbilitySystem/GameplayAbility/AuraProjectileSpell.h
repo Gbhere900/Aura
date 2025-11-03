@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AbilitySystem/GameplayAbility/AuraGameplayAbility.h"
+#include "AbilitySystem/GameplayAbility/AuraDamageGameplayAbility.h"
 #include "AuraProjectileSpell.generated.h"
 
 class AAuraProjectile;
@@ -12,7 +12,7 @@ class AAuraProjectile;
  * 
  */
 UCLASS()
-class AURA_API UAuraProjectileSpell : public UAuraGameplayAbility
+class AURA_API UAuraProjectileSpell : public UAuraDamageGameplayAbility
 {
 	GENERATED_BODY()
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
@@ -27,8 +27,7 @@ class AURA_API UAuraProjectileSpell : public UAuraGameplayAbility
 	UFUNCTION(BlueprintCallable)
 	void SpawnFireBLot(FVector TargetPosition);
 
-	UPROPERTY(EditDefaultsOnly,Category="Damage")
-	FScalableFloat ScalableDamage;
+
 
 	
 };

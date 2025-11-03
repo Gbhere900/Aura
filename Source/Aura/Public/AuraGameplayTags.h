@@ -47,6 +47,23 @@ public:
 	FGameplayTag InputTag_4;
 
 	/*
+	 *DamageTypes
+	 */
+	FGameplayTag Damage_Fire;
+	FGameplayTag Damage_Lightening;
+	FGameplayTag Damage_Arcane;
+	FGameplayTag Damage_Physics;
+
+	/*
+	 *DamageResistance
+	 */
+	FGameplayTag Attributes_Secondary_FireResistance;
+	FGameplayTag Attributes_Secondary_LighteningResistance;
+	FGameplayTag Attributes_Secondary_ArcaneResistance;
+	FGameplayTag Attributes_Secondary_PhysicsResistance;
+	
+	TMap<FGameplayTag, FGameplayTag> DamageTypeToResistance;
+	/*
 	 *else
 	 **/
 	FGameplayTag Damage;

@@ -37,8 +37,6 @@ void UAttributeMenuWidgetController::BroadcastAttributeInfo(const FGameplayTag& 
 	FAuraAttributeInfo Info = AttributeInfo->GetAttributeInfo(GameplayTag,true);
 	//Info.AttributeValue = GameplayAttribute.GetNumericValue(Cast<UAuraAttributeSet>(AttributeSet));
 	Info.AttributeValue = Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->GetNumericAttribute(GameplayAttribute); //上面注释掉的会得到错误的数值0
-	//GEngine->AddOnScreenDebugMessage(-1,5,FColor::Red,FString::Printf(TEXT("%f"),Cast<UAuraAttributeSet>(AttributeSet)->Armor.GetCurrentValue()));
-	//GEngine->AddOnScreenDebugMessage(-1,5,FColor::Red,FString::Printf(TEXT("%f"),Info.AttributeValue));
 	AttributeInfoDelegate.Broadcast(Info);
 }
 

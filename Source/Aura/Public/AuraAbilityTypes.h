@@ -20,9 +20,9 @@ public:
 		return StaticStruct();
 	};
 
-	virtual bool NetSerialize(FArchive& Ar, class UPackageMap* Map, bool& bOutSuccess) ;
+	virtual bool NetSerialize(FArchive& Ar, class UPackageMap* Map, bool& bOutSuccess);
 
-	virtual FAuraGameplayEffectContext* Duplicate() const
+	virtual FAuraGameplayEffectContext* Duplicate() const 
 	{
 		FAuraGameplayEffectContext* NewContext = new FAuraGameplayEffectContext();
 		*NewContext = *this;
@@ -46,7 +46,7 @@ struct TStructOpsTypeTraits<FAuraGameplayEffectContext>:public TStructOpsTypeTra
 {
 	enum
 	{
-		WithNetSerialize = true,
+		WithNetSerializer = true,
 		WithCopy = true,
 	};
 };

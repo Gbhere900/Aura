@@ -5,9 +5,11 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "AuraAbilityTypes.h"
 #include "AuraGameplayTags.h"
 #include "Net/UnrealNetwork.h"
 #include "GameplayEffectExtension.h"
+#include "AbilitySystem/AuraAbilitySystermLibrary.h"
 #include "AbilitySystem/CombatInterface.h"
 #include "GameFramework/Character.h"
 #include "Player/AuraPlayerController.h"
@@ -34,6 +36,12 @@ UAuraAttributeSet::UAuraAttributeSet()
 	TagToFunctionPointer.Add({ Tags .Attributes_Secondary_CriticalResistance,GetCriticalHitResistanceAttribute});
 	TagToFunctionPointer.Add({ Tags .Attributes_Secondary_HealthRegeneration,GetHealthRegenerationAttribute});
 	TagToFunctionPointer.Add({ Tags .Attributes_Secondary_ManaRegeneration,GetManaRegenerationAttribute});
+
+	TagToFunctionPointer.Add({ Tags .Attributes_Secondary_FireResistance,GetFireResistanceAttribute});
+	TagToFunctionPointer.Add({ Tags .Attributes_Secondary_LighteningResistance,GetLighteningResistanceAttribute});
+	TagToFunctionPointer.Add({ Tags .Attributes_Secondary_ArcaneResistance,GetArcaneResistanceAttribute});
+	TagToFunctionPointer.Add({ Tags .Attributes_Secondary_PhysicsResistance,GetPhysicsResistanceAttribute});
+	
 	TagToFunctionPointer.Add({ Tags .Attributes_Secondary_MaxHealth,GetMaxHealthAttribute});
 	TagToFunctionPointer.Add({ Tags .Attributes_Secondary_MaxMana,GetMaxManaAttribute});
 }
@@ -75,7 +83,11 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMo
 				EffectProperties.TargetASC->TryActivateAbilitiesByTag(GameplayTagContainer);
 			}
 
-			TryShowDamageText(EffectProperties,ComingDamageValue);
+			//TODO:完成剩下的视频
+			//获取isCritical和设置isCritical的顺序有讲究吗
+			bool bIsBlocked = UAuraAbilitySystermLibrary::GetIsBlocked(Data.EffectSpec.GetContext());
+			bool bIsCriticalHit = UAuraAbilitySystermLibrary::GetIsCriticalHit(Data.EffectSpec.GetContext());
+			TryShowDamageText(EffectProperties,ComingDamageValue,bIsCriticalHit,bIsBlocked);
 		}
 		
 		
@@ -99,7 +111,7 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMo
 	
 }
 
-bool UAuraAttributeSet::TryShowDamageText(const FEffectProperties& EffectProperties,const float& Damage)
+bool UAuraAttributeSet::TryShowDamageText(const FEffectProperties& EffectProperties,const float& Damage,bool bIsCriticalHit,bool bIsBlocked)
 {
 	if (EffectProperties.TargetAvatarActor != EffectProperties.SourceAvatarActor)
 	{
@@ -107,7 +119,7 @@ bool UAuraAttributeSet::TryShowDamageText(const FEffectProperties& EffectPropert
 		{
 			if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(EffectProperties.SourceController))
 			{
-				AuraPlayerController->ShowDamageText(Damage,EffectProperties.TargetAvatarActor);
+				AuraPlayerController->ShowDamageText(Damage,EffectProperties.TargetAvatarActor,bIsCriticalHit,bIsBlocked);
 				return true;
 			}
 		}
@@ -225,6 +237,26 @@ void UAuraAttributeSet::OnRep_HealthRegeneration(const FGameplayAttributeData& O
 void UAuraAttributeSet::OnRep_ManaRegeneration(const FGameplayAttributeData& OldManaRegeneration) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,ManaRegeneration,OldManaRegeneration);
+}
+
+void UAuraAttributeSet::OnRep_FireResistance(const FGameplayAttributeData& OldFireResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,FireResistance,OldFireResistance);
+}
+
+void UAuraAttributeSet::OnRep_LighteningResistance(const FGameplayAttributeData& OldLighteningResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,LighteningResistance,OldLighteningResistance);
+}
+
+void UAuraAttributeSet::OnRep_ArcaneResistance(const FGameplayAttributeData& OldArcaneResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,ArcaneResistance,OldArcaneResistance);
+}
+
+void UAuraAttributeSet::OnRep_PhysicsResistance(const FGameplayAttributeData& OldPhysicsResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet,PhysicsResistance,OldPhysicsResistance);
 }
 
 void UAuraAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const
