@@ -15,6 +15,8 @@
  * 
  */
 
+class AAuraAIController;
+class UBehaviorTree;
 enum class ECharacterClass : uint8;
 
 UCLASS()
@@ -72,5 +74,12 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	virtual UAnimMontage* GetHitReactAnimMontage_Implementation() override;
 
+	UPROPERTY(EditDefaultsOnly,Category="AI")
+	TObjectPtr<UBehaviorTree> BehaviorTree;
+
+	UPROPERTY()
+	TObjectPtr<AAuraAIController> AuraAIController;
+
+	void PossessedBy(AController* NewController) override;
 	
 };

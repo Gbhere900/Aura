@@ -7,6 +7,9 @@
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraAbilitySystermLibrary.h"
 #include "AbilitySystem/AuraAttributeSet.h"
+#include "AI/AuraAIController.h"
+#include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/WidgetComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
@@ -129,6 +132,8 @@ void AAuraEnemy::BindCallBackToDependences()
 	}
 }
 
+
+//这样用HitReact Tag来设置受击状态很巧妙
 void AAuraEnemy::HitReactEvent(const FGameplayTag GameplayTag, int32 Count)
 {
 	bool bIsHit = Count > 0;
@@ -140,12 +145,28 @@ void AAuraEnemy::HitReactEvent(const FGameplayTag GameplayTag, int32 Count)
 	{
 		GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
 	}
+	AuraAIController->GetBlackboardComponent()->SetValueAsBool("IsHitReact",bIsHit);
 }
 
 UAnimMontage* AAuraEnemy::GetHitReactAnimMontage_Implementation()
 {
 	return HitReactAnimMontage;	
 }
+
+void AAuraEnemy::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	//注意只在服务端执行行为树逻辑
+	if (!HasAuthority())
+		return;
+	AuraAIController = Cast<AAuraAIController>(NewController);
+	AuraAIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
+	AuraAIController->RunBehaviorTree(BehaviorTree);
+
+	AuraAIController->GetBlackboardComponent()->SetValueAsBool("IsRangeAttack",CharacterClass != ECharacterClass::Warrior);
+}
+
 
 
 

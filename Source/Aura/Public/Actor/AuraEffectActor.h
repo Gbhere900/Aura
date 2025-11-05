@@ -107,7 +107,11 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void OnEndOverlap(AActor* TargetActor);
 	
-	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category="Destroy")
+	bool bDestroyOnOverlap = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category="Destroy")
+	bool bEffectEnemy = false;
 	
 	
 	
