@@ -70,8 +70,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	UAnimMontage* HitReactAnimMontage;
-
-	UFUNCTION(BlueprintCallable)
 	virtual UAnimMontage* GetHitReactAnimMontage_Implementation() override;
 
 	UPROPERTY(EditDefaultsOnly,Category="AI")
