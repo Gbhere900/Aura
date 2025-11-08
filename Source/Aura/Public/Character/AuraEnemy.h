@@ -32,7 +32,6 @@ public:
 	/** end Enemy Interface*/
 
 	virtual int GetLevel() override;
-	virtual FTransform GetSocketTransform() override;
 
 	UPROPERTY(BlueprintAssignable)
 	FOnAttirbuteChangeSignature OnHealthChangedDelegate;
@@ -45,8 +44,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsHighlighted = false;
 
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Socket")
-	FName SocketName = FName();
+
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere)
 	TObjectPtr<UWidgetComponent> EnemyHealthBarWidgetComponent;

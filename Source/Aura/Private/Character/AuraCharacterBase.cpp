@@ -8,6 +8,7 @@
 #include "AbilitySystem/GameplayAbility/AuraGameplayAbility.h"
 #include "Aura/Aura.h"
 #include "Components/CapsuleComponent.h"
+#include "Engine/SkeletalMeshSocket.h"
 
 // Sets default values
 AAuraCharacterBase::AAuraCharacterBase()
@@ -70,10 +71,18 @@ void AAuraCharacterBase::ApplyGameplayEffectSpecToSelf(const TSubclassOf<UGamepl
 	AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*InitialGameplayEffectSpec.Data.Get(),AbilitySystemComponent);
 }
 
-FTransform AAuraCharacterBase::GetSocketTransform()
+FVector AAuraCharacterBase::GetSocketTransform_Implementation()
 {
-	return GetActorTransform();
+	check(Weapon);
+	return Weapon->GetSocketLocation(SocketName);
+	// FTransform SocketTransform = GetActorTransform();
+	// if (Weapon->GetSocketByName(SocketName))
+	// {
+	// 	SocketTransform = Weapon->GetSocketByName(SocketName)->GetSocketTransform(Weapon);
+	// }
+	// return SocketTransform;
 }
+
 
 int AAuraCharacterBase::GetLevel()
 {
@@ -84,7 +93,7 @@ void AAuraCharacterBase::Die()
 {
 	Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld,true));
 	MulticastHandleDeath();
-	
+	IsDead = true;
 }
 
 void AAuraCharacterBase::Dissolve()
@@ -105,6 +114,15 @@ void AAuraCharacterBase::Dissolve()
 	}
 }
 
+bool AAuraCharacterBase::IsDead_Implementation()
+{
+	return IsDead;
+}
+
+AActor* AAuraCharacterBase::GetAvatarActor_Implementation()
+{
+	return this;
+}
 
 
 void AAuraCharacterBase::MulticastHandleDeath_Implementation()

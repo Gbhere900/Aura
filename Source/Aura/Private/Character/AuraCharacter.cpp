@@ -75,13 +75,4 @@ void AAuraCharacter::InitAbilityActorInfo()
 
 }
 
- FTransform AAuraCharacter::GetSocketTransform()
-{
-	FTransform SocketTransform = GetActorTransform();
-	if (Weapon->GetSocketByName(SocketName))
-	{
-		SocketTransform = Weapon->GetSocketByName(SocketName)->GetSocketTransform(Weapon);
-	}
-	return SocketTransform;
-}
 

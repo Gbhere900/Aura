@@ -24,7 +24,8 @@ class AURA_API ICombatInterface
 public:
 	virtual int GetLevel() = 0;
 
-	virtual FTransform GetSocketTransform() = 0;
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	FVector GetSocketTransform();
 
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
 	UAnimMontage* GetHitReactAnimMontage();
@@ -33,6 +34,12 @@ public:
 	void FaceTarget(FVector Location);
 	
 	virtual void Die() = 0;
+
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
+	bool IsDead();
+
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
+	AActor* GetAvatarActor();
 };
 
 //这个类是我自己写的，不保证合理

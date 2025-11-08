@@ -30,8 +30,8 @@ void UAuraProjectileSpell::SpawnFireBLot(FVector TargetPosition)
 		return;
 	}
 
-	FTransform SpawnTransform = Cast<ICombatInterface>(GetAvatarActorFromActorInfo())->GetSocketTransform();
-
+	FVector SpawnPosition =ICombatInterface::Execute_GetSocketTransform(GetAvatarActorFromActorInfo());
+	FTransform SpawnTransform (SpawnPosition);
 	//SpawnActorDeferred是什么
 	AAuraProjectile* AuraProjectile = GetWorld()->SpawnActorDeferred<AAuraProjectile>(AuraProjectileClass,SpawnTransform,
 		GetAvatarActorFromActorInfo(),
@@ -39,7 +39,7 @@ void UAuraProjectileSpell::SpawnFireBLot(FVector TargetPosition)
 		ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 
 	CHECK(AuraProjectile);
-	FRotator Direction =(TargetPosition - SpawnTransform.GetLocation()).Rotation();
+	FRotator Direction =(TargetPosition - SpawnPosition).Rotation();
 	AuraProjectile->SetActorRotation(Direction);
 
 	UAbilitySystemComponent* SourceASC = GetAbilitySystemComponentFromActorInfo();

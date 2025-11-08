@@ -56,7 +56,10 @@ protected:
 	void virtual InitialAttributeSet();
 	void ApplyGameplayEffectSpecToSelf(const TSubclassOf<UGameplayEffect> GameplayEffect,const int Level) const;
 
-	virtual FTransform GetSocketTransform() override;
+	virtual FVector GetSocketTransform_Implementation() override;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Socket")
+	FName SocketName = FName();
 
 	virtual int GetLevel() override;
 	
@@ -75,6 +78,11 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void BeginWeaponDissolveTimeline(UMaterialInstanceDynamic* MaterialInstanceDynamic);
 
+	bool IsDead = false;
+
+	virtual bool IsDead_Implementation() override;
+
+	virtual AActor* GetAvatarActor_Implementation() override;
 private:
 	UPROPERTY(EditAnywhere,Category="GameplayAbilities")
 	TArray<TSubclassOf<UGameplayAbility>> GameplayAbilities; 

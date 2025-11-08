@@ -51,4 +51,8 @@ public:
 
 	UFUNCTION(BlueprintCallable,Category="AbilitySystemLibrary|GameEffectContext")
 	static void SetIsBlocked(FGameplayEffectContextHandle& GameplayEffectContextHandle,bool b);
+
+	UFUNCTION(BlueprintCallable)
+	static void GetLivePlayerWithinRadius(UPARAM()TArray<AActor*>& OutActors,const TArray<AActor*>& IgnoreActors,const FVector& Center,const float& Radius,const UObject* WorldContextObject);
 };
+

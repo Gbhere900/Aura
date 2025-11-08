@@ -30,15 +30,6 @@ int AAuraEnemy::GetLevel()
 	return Level;
 }
 
-FTransform AAuraEnemy::GetSocketTransform()
-{
-	FTransform SocketTransform = GetActorTransform();
-	if (Weapon->GetSocketByName(SocketName))
-	{
-		SocketTransform = Weapon->GetSocketByName(SocketName)->GetSocketTransform(Weapon);
-	}
-	return SocketTransform;
-}
 
 
 AAuraEnemy::AAuraEnemy()
