@@ -4,6 +4,7 @@
 #include "AbilitySystem/AuraAbilitySystermLibrary.h"
 
 #include "AuraAbilityTypes.h"
+#include "AbilitySystem/CombatInterface.h"
 #include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "Game/AuraGameModeBase.h"
 #include "Kismet/GameplayStatics.h"
@@ -55,7 +56,7 @@ void UAuraAbilitySystermLibrary::InitializeCharacterAttributeByClass(const UObje
 	FGameplayEffectContextHandle GameplayEffectContextHandle = ASC->MakeEffectContext();
 	GameplayEffectContextHandle.AddSourceObject(ASC->GetAvatarActor());
 	
-	TSubclassOf<UGameplayEffect> PrimaryEffect = CharacterClassInfo->GetClassPrimaryEffect(CharacterClass);
+	TSubclassOf<UGameplayEffect> PrimaryEffect = CharacterClassInfo->GetCharacterClassPrimaryEffect(CharacterClass);
 	FGameplayEffectSpecHandle PrimaryGameplayEffectSpecHandle = ASC->MakeOutgoingSpec(PrimaryEffect,Level, GameplayEffectContextHandle);
 	ASC->ApplyGameplayEffectSpecToSelf(*PrimaryGameplayEffectSpecHandle.Data.Get());
 
@@ -68,14 +69,20 @@ void UAuraAbilitySystermLibrary::InitializeCharacterAttributeByClass(const UObje
 	ASC->ApplyGameplayEffectSpecToSelf(* VitalGameplayEffectSpecHandle.Data.Get());
 }
 
-void UAuraAbilitySystermLibrary::InitializeGameplayAbility(const UObject* WorldContextObject, UAbilitySystemComponent* ASC)
+void UAuraAbilitySystermLibrary::InitializeGameplayAbilityByClass(const UObject* WorldContextObject, UAbilitySystemComponent* ASC,ECharacterClass CharacterClass)
 {
 	AAuraGameModeBase* AuraGameModeBase = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
 	for (const auto& GameplayAbility : AuraGameModeBase->CharacterClassInfo->CommonGameplayAbility)
 	{
 		ASC->GiveAbility(GameplayAbility);
 	}
-	
+
+	for (const auto& GameplayAbility : AuraGameModeBase->CharacterClassInfo->GetCharacterClassAbilities(CharacterClass))
+	{
+		const int Characterlevel = CastChecked<ICombatInterface>(ASC->GetAvatarActor())->GetLevel();
+		FGameplayAbilitySpec GameplayAbilitySpec(GameplayAbility,Characterlevel);
+		ASC->GiveAbility(GameplayAbilitySpec);
+	}
 }
 
 UCharacterClassInfo* UAuraAbilitySystermLibrary::GetCharacterClassInfo(const UObject* WorldContextObject)

@@ -60,6 +60,11 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.DamageTypeToResistance.Add(GameplayTags.Damage_Physics,GameplayTags.Attributes_Secondary_PhysicsResistance);
 	
 	/*
+	 *
+	 */
+	GameplayTags.Ability_Attack = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Ability_Attack"));
+	
+	/*
 	 *else
 	 */
 	GameplayTags.Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Damage"));

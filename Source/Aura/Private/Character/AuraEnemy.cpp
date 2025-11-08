@@ -97,7 +97,7 @@ void AAuraEnemy::InitializeGameplayAbility()
 	{
 		return;
 	}
-	UAuraAbilitySystermLibrary::InitializeGameplayAbility(this,AbilitySystemComponent);
+	UAuraAbilitySystermLibrary::InitializeGameplayAbilityByClass(this,AbilitySystemComponent,CharacterClass);
 }
 
 void AAuraEnemy::BoardcastInitialAttribute()
@@ -166,6 +166,20 @@ void AAuraEnemy::PossessedBy(AController* NewController)
 
 	AuraAIController->GetBlackboardComponent()->SetValueAsBool("IsRangeAttacker",CharacterClass != ECharacterClass::Warrior);
 }
+
+AActor* AAuraEnemy::GetTargetActor_Implementation()
+{
+	return TargetActor;
+}
+
+void AAuraEnemy::SetTargetActor_Implementation(AActor* Actor)
+{
+	this->TargetActor = Actor;
+}
+
+
+
+
 
 
 

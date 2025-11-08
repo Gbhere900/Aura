@@ -63,6 +63,12 @@ public:
 	FGameplayTag Attributes_Secondary_PhysicsResistance;
 	
 	TMap<FGameplayTag, FGameplayTag> DamageTypeToResistance;
+
+	/*
+	 *GameplayAbilities
+	 */
+	FGameplayTag Ability_Attack;
+	
 	/*
 	 *else
 	 **/

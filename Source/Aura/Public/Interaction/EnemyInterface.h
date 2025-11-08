@@ -16,6 +16,8 @@ class UEnemyInterface : public UInterface
 /**
  * 
  */
+
+//虚幻中接口的定义有些不同？以及UFUNCTION(BlueprintCallable)的标识
 class AURA_API IEnemyInterface
 {
 	GENERATED_BODY()
@@ -23,5 +25,12 @@ class AURA_API IEnemyInterface
 public:
 	virtual void HighlightEnemy() = 0;
 	virtual void UnHighLightEnemy() = 0;
+
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
+	void SetTargetActor(AActor* Actor);
+
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
+	AActor* GetTargetActor();
+	
 protected:
 };

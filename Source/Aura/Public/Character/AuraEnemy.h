@@ -80,4 +80,10 @@ protected:
 
 	void PossessedBy(AController* NewController) override;
 	
+	TObjectPtr<AActor> TargetActor;
+	
+	virtual AActor* GetTargetActor_Implementation() override;
+
+	virtual void SetTargetActor_Implementation(AActor* Actor) override;
+	
 };

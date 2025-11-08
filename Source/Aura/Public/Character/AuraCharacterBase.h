@@ -26,6 +26,7 @@ public:
 	void AddGameplayAbilities();
 	
 protected:
+	//为什么运动扭曲组件motion warpping 不在这里定义而是在Aura和EnemyBase蓝图里分别添加
 	virtual void BeginPlay() override;
 	UPROPERTY(EditAnywhere,Category = "Combat")
 	TObjectPtr<USkeletalMeshComponent> Weapon;
