@@ -83,5 +83,6 @@ protected:
 	virtual AActor* GetTargetActor_Implementation() override;
 
 	virtual void SetTargetActor_Implementation(AActor* Actor) override;
+
 	
 };

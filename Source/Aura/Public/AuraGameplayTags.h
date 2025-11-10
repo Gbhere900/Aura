@@ -68,6 +68,13 @@ public:
 	 *GameplayAbilities
 	 */
 	FGameplayTag Ability_Attack;
+
+	/*
+	 **Montage
+	 */
+	FGameplayTag Montage_Attack_Weapon;
+	FGameplayTag Montage_Attack_LeftHand;
+	FGameplayTag Montage_Attack_RightHand;
 	
 	/*
 	 *else

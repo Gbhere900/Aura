@@ -124,7 +124,7 @@ void AAuraEnemy::BindCallBackToDependences()
 }
 
 
-//这样用HitReact Tag来设置受击状态很巧妙
+//这样用HitReact Tag来设置受击状态很巧妙,不仅实现了受击状态的开始和结束，还考虑到了多次受击时刷新的情况，只有所有受击tag都消失才会恢复
 void AAuraEnemy::HitReactEvent(const FGameplayTag GameplayTag, int32 Count)
 {
 	bool bIsHit = Count > 0;

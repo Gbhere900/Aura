@@ -4,6 +4,7 @@
 #include "Character//AuraCharacterBase.h"
 
 #include "AudioMixerBlueprintLibrary.h"
+#include "AuraGameplayTags.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/GameplayAbility/AuraGameplayAbility.h"
 #include "Aura/Aura.h"
@@ -71,16 +72,20 @@ void AAuraCharacterBase::ApplyGameplayEffectSpecToSelf(const TSubclassOf<UGamepl
 	AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*InitialGameplayEffectSpec.Data.Get(),AbilitySystemComponent);
 }
 
-FVector AAuraCharacterBase::GetSocketTransform_Implementation()
+FVector AAuraCharacterBase::GetSocketLocation_Implementation(FGameplayTag GameplayTag)
 {
-	check(Weapon);
-	return Weapon->GetSocketLocation(SocketName);
-	// FTransform SocketTransform = GetActorTransform();
-	// if (Weapon->GetSocketByName(SocketName))
-	// {
-	// 	SocketTransform = Weapon->GetSocketByName(SocketName)->GetSocketTransform(Weapon);
-	// }
-	// return SocketTransform;
+	FAuraGameplayTags AuraGameplayTags = FAuraGameplayTags::Get();
+	if (GameplayTag.MatchesTagExact(AuraGameplayTags.Montage_Attack_RightHand))
+		return Weapon->GetSocketLocation(FName(RightHandSocketName));
+	if ((GameplayTag.MatchesTagExact(AuraGameplayTags.Montage_Attack_LeftHand)))
+		return Weapon->GetSocketLocation(FName(LeftHandSocketName));
+	if ((GameplayTag.MatchesTagExact(AuraGameplayTags.Montage_Attack_Weapon)))
+	{
+		check(Weapon);
+		return Weapon->GetSocketLocation(FName(WeaponSocketName));
+	}
+	return FVector::ZeroVector;
+		
 }
 
 
@@ -122,6 +127,11 @@ bool AAuraCharacterBase::IsDead_Implementation()
 AActor* AAuraCharacterBase::GetAvatarActor_Implementation()
 {
 	return this;
+}
+
+TArray<FTaggedMontage> AAuraCharacterBase::GetTaggedMontages_Implementation()
+{
+	return TaggedMontages;
 }
 
 

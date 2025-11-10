@@ -56,11 +56,14 @@ protected:
 	void virtual InitialAttributeSet();
 	void ApplyGameplayEffectSpecToSelf(const TSubclassOf<UGameplayEffect> GameplayEffect,const int Level) const;
 
-	virtual FVector GetSocketTransform_Implementation() override;
-
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Socket")
-	FName SocketName = FName();
-
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	FString RightHandSocketName;
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	FString LeftHandSocketName;
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	FString WeaponSocketName;
+	virtual FVector GetSocketLocation_Implementation(FGameplayTag GameplayTag) override;
+	
 	virtual int GetLevel() override;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="CharacterClassDefault")
@@ -83,6 +86,14 @@ protected:
 	virtual bool IsDead_Implementation() override;
 
 	virtual AActor* GetAvatarActor_Implementation() override;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	TArray<FTaggedMontage> TaggedMontages;
+
+	virtual TArray<FTaggedMontage> GetTaggedMontages_Implementation() override;
+
+	
+	
 private:
 	UPROPERTY(EditAnywhere,Category="GameplayAbilities")
 	TArray<TSubclassOf<UGameplayAbility>> GameplayAbilities; 

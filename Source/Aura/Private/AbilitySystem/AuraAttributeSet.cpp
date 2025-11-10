@@ -83,7 +83,7 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMo
 				EffectProperties.TargetASC->TryActivateAbilitiesByTag(GameplayTagContainer);
 			}
 
-			//TODO:完成剩下的视频
+			
 			//获取isCritical和设置isCritical的顺序有讲究吗
 			bool bIsBlocked = UAuraAbilitySystermLibrary::GetIsBlocked(Data.EffectSpec.GetContext());
 			bool bIsCriticalHit = UAuraAbilitySystermLibrary::GetIsCriticalHit(Data.EffectSpec.GetContext());
@@ -118,6 +118,11 @@ bool UAuraAttributeSet::TryShowDamageText(const FEffectProperties& EffectPropert
 		if (EffectProperties.SourceController != nullptr)
 		{
 			if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(EffectProperties.SourceController))
+			{
+				AuraPlayerController->ShowDamageText(Damage,EffectProperties.TargetAvatarActor,bIsCriticalHit,bIsBlocked);
+				return true;
+			}
+			if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(EffectProperties.TargetController))
 			{
 				AuraPlayerController->ShowDamageText(Damage,EffectProperties.TargetAvatarActor,bIsCriticalHit,bIsBlocked);
 				return true;

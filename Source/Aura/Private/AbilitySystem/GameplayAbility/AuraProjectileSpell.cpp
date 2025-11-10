@@ -30,7 +30,8 @@ void UAuraProjectileSpell::SpawnFireBLot(FVector TargetPosition)
 		return;
 	}
 
-	FVector SpawnPosition =ICombatInterface::Execute_GetSocketTransform(GetAvatarActorFromActorInfo());
+	FVector SpawnPosition =ICombatInterface::Execute_GetSocketLocation(GetAvatarActorFromActorInfo(),
+		FAuraGameplayTags::Get().Montage_Attack_Weapon);
 	FTransform SpawnTransform (SpawnPosition);
 	//SpawnActorDeferred是什么
 	AAuraProjectile* AuraProjectile = GetWorld()->SpawnActorDeferred<AAuraProjectile>(AuraProjectileClass,SpawnTransform,
@@ -44,7 +45,7 @@ void UAuraProjectileSpell::SpawnFireBLot(FVector TargetPosition)
 
 	UAbilitySystemComponent* SourceASC = GetAbilitySystemComponentFromActorInfo();
 
-	FGameplayEffectSpecHandle GameplayEffectSpecHandle = SourceASC->MakeOutgoingSpec(GameplayEffect,GetAbilityLevel(),SourceASC->MakeEffectContext());
+	FGameplayEffectSpecHandle GameplayEffectSpecHandle = SourceASC->MakeOutgoingSpec(DamageEffect,GetAbilityLevel(),SourceASC->MakeEffectContext());
 	for (auto& pair : DamageTypes)
 	{
 		const float DamageValue = pair.Value.GetValueAtLevel(GetAbilityLevel());

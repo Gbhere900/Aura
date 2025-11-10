@@ -3,8 +3,24 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "UObject/Interface.h"
 #include "CombatInterface.generated.h"
+
+struct FGameplayTag;
+
+USTRUCT(BlueprintType)
+struct FTaggedMontage
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UAnimMontage* Montage = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FGameplayTag MontageTag;
+	
+};
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI,BlueprintType)
@@ -25,7 +41,7 @@ public:
 	virtual int GetLevel() = 0;
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	FVector GetSocketTransform();
+	FVector GetSocketLocation(FGameplayTag GameplayTag);
 
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
 	UAnimMontage* GetHitReactAnimMontage();
@@ -40,6 +56,9 @@ public:
 
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
 	AActor* GetAvatarActor();
+
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
+	TArray<FTaggedMontage> GetTaggedMontages();
 };
 
 //这个类是我自己写的，不保证合理
