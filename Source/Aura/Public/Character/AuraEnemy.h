@@ -38,6 +38,7 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnAttirbuteChangeSignature OnMaxHealthChangedDelegate;
 
+	
 protected:
 	virtual void BeginPlay() override;
 	virtual void InitAbilityActorInfo() override;
@@ -84,5 +85,6 @@ protected:
 
 	virtual void SetTargetActor_Implementation(AActor* Actor) override;
 
+	
 	
 };
