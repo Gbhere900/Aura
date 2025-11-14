@@ -165,6 +165,17 @@ void UAuraAbilitySystermLibrary::GetLivePlayerWithinRadius(TArray<AActor*>& OutA
 	}
 }
 
+bool UAuraAbilitySystermLibrary::IsFriendly(AActor* Actor1, AActor* Actor2)
+{
+	bool HasPlayerTag1 = Actor1->ActorHasTag("Player");
+	bool HasPlayerTag2 = Actor2->ActorHasTag("Player");
+
+	bool HasEnemyTag1 = Actor1->ActorHasTag("Enemy");
+	bool HasEnemyTag2 = Actor2->ActorHasTag("Enemy");
+
+	return (HasPlayerTag1 && HasPlayerTag2 || HasEnemyTag1 && HasEnemyTag2);
+}
+
 
 
 

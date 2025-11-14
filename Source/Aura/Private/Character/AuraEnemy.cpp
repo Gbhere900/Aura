@@ -46,6 +46,16 @@ AAuraEnemy::AAuraEnemy()
 	//GetMesh()->SetCollisionResponseToChannel(ECC_Projectile,ECR_Block);
 }
 
+FTaggedMontage AAuraEnemy::GetTaggedMontage_Implementation(FGameplayTag Tag)
+{
+	for (FTaggedMontage TaggedMontage: TaggedMontages)
+	{
+		if (TaggedMontage.MontageTag == Tag)
+			return TaggedMontage;
+	}
+	return FTaggedMontage();
+}
+
 void AAuraEnemy::BeginPlay()
 {
 	Super::BeginPlay();
@@ -166,6 +176,13 @@ AActor* AAuraEnemy::GetTargetActor_Implementation()
 void AAuraEnemy::SetTargetActor_Implementation(AActor* Actor)
 {
 	this->TargetActor = Actor;
+}
+
+void AAuraEnemy::Die()
+{
+	Super::Die();
+	AuraAIController->GetBlackboardComponent()->SetValueAsBool("IsDead",true);
+	SetLifeSpan(LifeTime);
 }
 
 

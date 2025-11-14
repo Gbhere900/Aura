@@ -25,9 +25,6 @@ class AURA_API UAuraProjectileSpell : public UAuraDamageGameplayAbility
 	TSubclassOf<UGameplayEffect> GameplayEffect;
 
 	UFUNCTION(BlueprintCallable)
-	void SpawnFireBLot(FVector TargetPosition);
-
-
-
+	void SpawnFireBLot(FVector TargetPosition,FGameplayTag SocketTag,bool bOverridePitch,float Pitch);
 	
 };

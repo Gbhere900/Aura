@@ -7,6 +7,7 @@
 #include "UObject/Interface.h"
 #include "CombatInterface.generated.h"
 
+class UNiagaraSystem;
 struct FGameplayTag;
 
 USTRUCT(BlueprintType)
@@ -18,7 +19,13 @@ struct FTaggedMontage
 	UAnimMontage* Montage = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FGameplayTag SocketTag;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FGameplayTag MontageTag;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	USoundBase* Sound = nullptr;
 	
 };
 
@@ -59,6 +66,19 @@ public:
 
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
 	TArray<FTaggedMontage> GetTaggedMontages();
+
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
+	UNiagaraSystem* GetBloodEffect();
+
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
+	FTaggedMontage GetTaggedMontage(FGameplayTag Tag);
+
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
+	int GetFollowerNum() ;
+
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
+	void AddOrSubtractFollowerNum(int DeltaValue);
+	
 };
 
 //这个类是我自己写的，不保证合理

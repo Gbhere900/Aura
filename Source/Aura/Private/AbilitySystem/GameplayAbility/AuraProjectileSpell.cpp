@@ -22,7 +22,7 @@ void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 }
 
 
-void UAuraProjectileSpell::SpawnFireBLot(FVector TargetPosition)
+void UAuraProjectileSpell::SpawnFireBLot(FVector TargetPosition,FGameplayTag SocketTag,bool bOverridePitch,float Pitch)
 {
 	//让因为投射物能力只在服务器触发，并且让火球的可复制为true,客户端运行的是火球的复制
 	if (!GetAvatarActorFromActorInfo()->HasAuthority())
@@ -31,7 +31,7 @@ void UAuraProjectileSpell::SpawnFireBLot(FVector TargetPosition)
 	}
 
 	FVector SpawnPosition =ICombatInterface::Execute_GetSocketLocation(GetAvatarActorFromActorInfo(),
-		FAuraGameplayTags::Get().Montage_Attack_Weapon);
+		SocketTag);
 	FTransform SpawnTransform (SpawnPosition);
 	//SpawnActorDeferred是什么
 	AAuraProjectile* AuraProjectile = GetWorld()->SpawnActorDeferred<AAuraProjectile>(AuraProjectileClass,SpawnTransform,
@@ -41,6 +41,10 @@ void UAuraProjectileSpell::SpawnFireBLot(FVector TargetPosition)
 
 	CHECK(AuraProjectile);
 	FRotator Direction =(TargetPosition - SpawnPosition).Rotation();
+	if (bOverridePitch)
+	{
+		Direction.Pitch = Pitch;
+	}
 	AuraProjectile->SetActorRotation(Direction);
 
 	UAbilitySystemComponent* SourceASC = GetAbilitySystemComponentFromActorInfo();

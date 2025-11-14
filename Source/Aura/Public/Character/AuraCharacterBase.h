@@ -24,7 +24,18 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	virtual TObjectPtr<UAttributeSet> GetAttributeSet() const {return AttributeSet;}
 	void AddGameplayAbilities();
-	
+
+	virtual UNiagaraSystem* GetBloodEffect_Implementation() override;
+
+	virtual int GetFollowerNum_Implementation() override
+	{
+		return FollowerNum;
+	};
+
+	virtual void AddOrSubtractFollowerNum_Implementation(const int DeltaValue) override
+	{
+		FollowerNum += DeltaValue;
+	};
 protected:
 	//为什么运动扭曲组件motion warpping 不在这里定义而是在Aura和EnemyBase蓝图里分别添加
 	virtual void BeginPlay() override;
@@ -62,6 +73,8 @@ protected:
 	FString LeftHandSocketName;
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	FString WeaponSocketName;
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	FString TailSocketName;
 	virtual FVector GetSocketLocation_Implementation(FGameplayTag GameplayTag) override;
 	
 	virtual int GetLevel() override;
@@ -69,7 +82,9 @@ protected:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="CharacterClassDefault")
 	int Level = 1;
 
-
+	UPROPERTY(EditDefaultsOnly,category="Death")
+	TObjectPtr<USoundBase> DeathSound = nullptr;
+	
 	virtual void Die() override;
 
 	UFUNCTION(NetMulticast,Reliable)
@@ -92,7 +107,10 @@ protected:
 
 	virtual TArray<FTaggedMontage> GetTaggedMontages_Implementation() override;
 
-	
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	UNiagaraSystem* BloodEffect;
+
+	int FollowerNum = 0;
 	
 private:
 	UPROPERTY(EditAnywhere,Category="GameplayAbilities")

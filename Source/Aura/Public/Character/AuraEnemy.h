@@ -38,6 +38,7 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnAttirbuteChangeSignature OnMaxHealthChangedDelegate;
 
+	virtual FTaggedMontage GetTaggedMontage_Implementation(FGameplayTag Tag) override;
 	
 protected:
 	virtual void BeginPlay() override;
@@ -85,6 +86,11 @@ protected:
 
 	virtual void SetTargetActor_Implementation(AActor* Actor) override;
 
+	UPROPERTY(EditAnywhere,category="Death")
+	float LifeTime = 5.f; 
+
+
 	
+	virtual void Die() override;
 	
 };

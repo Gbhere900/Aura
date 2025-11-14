@@ -10,6 +10,7 @@
 #include "Aura/Aura.h"
 #include "Components/CapsuleComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AAuraCharacterBase::AAuraCharacterBase()
@@ -45,6 +46,12 @@ void AAuraCharacterBase::AddGameplayAbilities()			//视频里是这个函数调�
 
 }
 
+UNiagaraSystem* AAuraCharacterBase::GetBloodEffect_Implementation()
+{
+	return BloodEffect;
+}
+
+
 void AAuraCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
@@ -75,14 +82,18 @@ void AAuraCharacterBase::ApplyGameplayEffectSpecToSelf(const TSubclassOf<UGamepl
 FVector AAuraCharacterBase::GetSocketLocation_Implementation(FGameplayTag GameplayTag)
 {
 	FAuraGameplayTags AuraGameplayTags = FAuraGameplayTags::Get();
-	if (GameplayTag.MatchesTagExact(AuraGameplayTags.Montage_Attack_RightHand))
+	if (GameplayTag.MatchesTagExact(AuraGameplayTags.Socket_RightHand))
 		return Weapon->GetSocketLocation(FName(RightHandSocketName));
-	if ((GameplayTag.MatchesTagExact(AuraGameplayTags.Montage_Attack_LeftHand)))
+	if ((GameplayTag.MatchesTagExact(AuraGameplayTags.Socket_LeftHand)))
 		return Weapon->GetSocketLocation(FName(LeftHandSocketName));
-	if ((GameplayTag.MatchesTagExact(AuraGameplayTags.Montage_Attack_Weapon)))
+	if ((GameplayTag.MatchesTagExact(AuraGameplayTags.Socket_Weapon)))
 	{
 		check(Weapon);
 		return Weapon->GetSocketLocation(FName(WeaponSocketName));
+	}
+	if ((GameplayTag.MatchesTagExact(AuraGameplayTags.Socket_Tail)))
+	{
+		return Weapon->GetSocketLocation(FName(TailSocketName));
 	}
 	return FVector::ZeroVector;
 		
@@ -99,6 +110,8 @@ void AAuraCharacterBase::Die()
 	Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld,true));
 	MulticastHandleDeath();
 	IsDead = true;
+	
+	UGameplayStatics::PlaySoundAtLocation(this,DeathSound,GetActorLocation(),GetActorRotation());
 }
 
 void AAuraCharacterBase::Dissolve()

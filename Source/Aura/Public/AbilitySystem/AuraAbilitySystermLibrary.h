@@ -54,5 +54,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	static void GetLivePlayerWithinRadius(UPARAM()TArray<AActor*>& OutActors,const TArray<AActor*>& IgnoreActors,const FVector& Center,const float& Radius,const UObject* WorldContextObject);
+	
+	UFUNCTION(BlueprintCallable)
+	static bool IsFriendly(AActor* Actor1,AActor* Actor2);
 };
 
