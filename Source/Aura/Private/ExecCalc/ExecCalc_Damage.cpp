@@ -119,7 +119,7 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	{
 		TMap<FGameplayTag, FGameplayEffectAttributeCaptureDefinition> TagToResistance = GetDamageStatic().TagToResistance;
 		checkf(GetDamageStatic().TagToResistance.Contains(pair.Value),TEXT("Target"));
-		float TempDamage = EffectSpec.GetSetByCallerMagnitude(pair.Key);
+		float TempDamage = EffectSpec.GetSetByCallerMagnitude(pair.Key,false);
 		float TempResistance = 0;
 		FGameplayEffectAttributeCaptureDefinition DamageCapture = GetDamageStatic().TagToResistance[pair.Value];
 		ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageCapture,EvalParams,TempResistance);
