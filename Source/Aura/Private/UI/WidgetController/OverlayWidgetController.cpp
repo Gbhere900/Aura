@@ -56,6 +56,40 @@ void UOverlayWidgetController::BindCallBackToDependences()
 		}
 	}
 	);
+
+	if (UAuraAbilitySystemComponent* ASC = Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent))
+	{
+		ASC->OnAbilityChangedDelegate.AddLambda(	[ASC, this]
+		{
+			for (auto& AbilitySpec: ASC->GetActivatableAbilities())
+			{
+				FAbilityInfo Info;
+				//为什么这里要加一个Get ?因为不加也不错
+				for (FGameplayTag GamePlayTag : AbilitySpec.Ability.Get()->AbilityTags)
+				{
+					if (GamePlayTag.MatchesTag(FGameplayTag::RequestGameplayTag("Ability")))
+					{
+						Info = AbilityInfo->GetAbilityInfo(GamePlayTag,true);
+						
+						break;
+					}
+				}
+
+				//能力和标签的关系是什么？上面获取的标签和这里获取的标签有什么区别
+				for (FGameplayTag InputTag : AbilitySpec.DynamicAbilityTags)
+				{
+					if (InputTag.MatchesTag(FGameplayTag::RequestGameplayTag("InputTag")))
+					{
+						Info.InputTag = InputTag;
+					}
+				}
+				OnAbilityChangedDelegate.Broadcast(Info);	
+			}
+		}
+		);
+	}
+
+	
 }
 
 

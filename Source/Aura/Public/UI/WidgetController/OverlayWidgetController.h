@@ -4,9 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
+#include "AbilitySystem/Data/AbilityInfo.h"
 #include "UI/Widget/AuraUserWidget.h"
 #include "UI/WidgetController/AuraWidgetController.h"
 #include "OverlayWidgetController.generated.h"
+
+class UAbilityInfo;
 
 USTRUCT()
 struct FUIWidgetRow : public FTableRowBase
@@ -24,6 +27,9 @@ struct FUIWidgetRow : public FTableRowBase
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)
 	UTexture2D* Image = nullptr;
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	UAbilityInfo* AbilityInfo;
 };
 
 struct FOnAttributeChangeData;
@@ -31,7 +37,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttirbuteChangeSignature, float, 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMessageWidgetRowSignature,FUIWidgetRow,UIWidgetRow);
 
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAbilityChangeSignature,FAbilityInfo,Info);
 /**
  * 
  */
@@ -62,11 +68,16 @@ public:
 
 	virtual void BoardcastInitialAttribute() override;
 	virtual void BindCallBackToDependences() override;
+	
+	FAbilityChangeSignature OnAbilityChangedDelegate;
 
 protected:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)
 	UDataTable* DataTable;
 
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	UAbilityInfo* AbilityInfo;
+	
 	template<typename T>
 	
 	T* GetDataTableRowByName(UDataTable* DataTable,const FGameplayTag& GameplayTag);
@@ -74,6 +85,8 @@ protected:
 	void MaxHealthChanged(const FOnAttributeChangeData& MaxHealth);
 	void ManaChanged(const FOnAttributeChangeData& Mana);
 	void MaxManaChanged(const FOnAttributeChangeData& MaxMana);
+
+	
 };
 
 template <typename T>

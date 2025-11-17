@@ -69,6 +69,7 @@ public:
 	 */
 	FGameplayTag Ability_Attack;
 	FGameplayTag Ability_Summon;
+	FGameplayTag Ability_FIre_FireBolt;
 
 	/*
 	 **Montage

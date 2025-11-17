@@ -64,6 +64,7 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 	 */
 	GameplayTags.Ability_Attack = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Ability.Attack"));
 	GameplayTags.Ability_Summon = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Ability.Summon"));
+	GameplayTags.Ability_FIre_FireBolt = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Ability.Fire.FireBolt"));;
 	/*
 	 **Montage
 	 */
