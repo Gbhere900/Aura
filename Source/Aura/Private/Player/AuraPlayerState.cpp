@@ -16,12 +16,23 @@ AAuraPlayerState::AAuraPlayerState()
 
 	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>(FName("AttributeSet"));
 	//AbilitySystemComponent->AddAttributeSetSubobject<UAuraAttributeSet>(AttributeSet);
+
 	
 }
 
 UAbilitySystemComponent* AAuraPlayerState::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
+}
+
+void AAuraPlayerState::OnRep_Level()
+{
+	OnLevelChangedDelegate.Broadcast();
+}
+
+void AAuraPlayerState::OnRep_XP()
+{
+	OnXPChangedDelegate.Broadcast();
 }
 
 

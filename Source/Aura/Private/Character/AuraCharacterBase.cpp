@@ -29,20 +29,11 @@ UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
 	return AbilitySystemComponent;
 }
 
-void AAuraCharacterBase::AddGameplayAbilities()			//视频里是这个函数调用AuraASC中的AddGaneplayAbilities，而不是直接在这里实现
+void AAuraCharacterBase::AddInitialGameplayAbilities()			//视频里是这个函数调用AuraASC中的AddGaneplayAbilities，而不是直接在这里实现
 {
 	if (!HasAuthority())
 		return;
-	for (TSubclassOf<UGameplayAbility> Ability : GameplayAbilities)
-	{
-
-		FGameplayAbilitySpec GameplayAbilitySpec = FGameplayAbilitySpec(Ability,1);
-		if (const UAuraGameplayAbility* AuraGameplayAbility = Cast<UAuraGameplayAbility>(GameplayAbilitySpec.Ability))
-		{
-			GameplayAbilitySpec.DynamicAbilityTags.AddTag(AuraGameplayAbility->InputActionTag);
-		}
-			AbilitySystemComponent->GiveAbility(GameplayAbilitySpec);
-	}
+	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AddInitialGameplayAbilities(GameplayAbilities);
 
 }
 

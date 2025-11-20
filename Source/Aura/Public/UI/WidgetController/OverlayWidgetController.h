@@ -4,12 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
-#include "AbilitySystem/Data/AbilityInfo.h"
+#include "AbilitySystem/Data/AbilityInfoData.h"
 #include "UI/Widget/AuraUserWidget.h"
 #include "UI/WidgetController/AuraWidgetController.h"
 #include "OverlayWidgetController.generated.h"
 
-class UAbilityInfo;
+class UAbilityInfoData;
 
 USTRUCT()
 struct FUIWidgetRow : public FTableRowBase
@@ -29,7 +29,7 @@ struct FUIWidgetRow : public FTableRowBase
 	UTexture2D* Image = nullptr;
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
-	UAbilityInfo* AbilityInfo;
+	UAbilityInfoData* AbilityInfo;
 };
 
 struct FOnAttributeChangeData;
@@ -37,7 +37,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttirbuteChangeSignature, float, 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMessageWidgetRowSignature,FUIWidgetRow,UIWidgetRow);
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAbilityChangeSignature,FAbilityInfo,Info);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAbilityChangeSignature,FAbilityInfos,Info);
+
 /**
  * 
  */
@@ -68,15 +69,22 @@ public:
 
 	virtual void BoardcastInitialAttribute() override;
 	virtual void BindCallBackToDependences() override;
-	
+
+	UPROPERTY(BlueprintAssignable)
 	FAbilityChangeSignature OnAbilityChangedDelegate;
 
+	UPROPERTY(BlueprintAssignable)
+	FOnAttirbuteChangeSignature OnXPChangedDelegate;
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnAttirbuteChangeSignature OnLevelChangedDelegate;
+	
 protected:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)
 	UDataTable* DataTable;
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
-	UAbilityInfo* AbilityInfo;
+	UAbilityInfoData* AbilityInfo;
 	
 	template<typename T>
 	
@@ -86,7 +94,12 @@ protected:
 	void ManaChanged(const FOnAttributeChangeData& Mana);
 	void MaxManaChanged(const FOnAttributeChangeData& MaxMana);
 
-	
+	UFUNCTION()
+	void OnChangeAbilities();
+
+	void OnLevelChanged();
+
+	void OnXPChanged();
 };
 
 template <typename T>

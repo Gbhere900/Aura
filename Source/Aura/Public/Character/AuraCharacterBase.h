@@ -23,7 +23,7 @@ public:
 	AAuraCharacterBase();
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	virtual TObjectPtr<UAttributeSet> GetAttributeSet() const {return AttributeSet;}
-	void AddGameplayAbilities();
+	void AddInitialGameplayAbilities();
 
 	virtual UNiagaraSystem* GetBloodEffect_Implementation() override;
 

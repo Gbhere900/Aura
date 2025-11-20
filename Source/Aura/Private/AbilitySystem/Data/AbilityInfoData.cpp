@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AbilitySystem/Data/AbilityInfo.h"
+#include "AbilitySystem/Data/AbilityInfoData.h"
 
 #include "Aura/AuraLogChannels.h"
 
-FAbilityInfo UAbilityInfo::GetAbilityInfo(const FGameplayTag& AbilityTag, const bool bLogIfNotFound)
+FAbilityInfos UAbilityInfoData::GetAbilityInfo(const FGameplayTag& AbilityTag, const bool bLogIfNotFound)
 {
 	for (auto AbilityInfo : AbilityInfos)
 	{
@@ -16,8 +16,8 @@ FAbilityInfo UAbilityInfo::GetAbilityInfo(const FGameplayTag& AbilityTag, const 
 	}
 	if (bLogIfNotFound)
 	{
-		UE_LOG(LogAura, Error,TEXT("Can't find info for AbilityTag [%s] on AbilityInfo [%s]"), AbilityTag.ToString(),
+		UE_LOG(LogAura, Error,TEXT("Can't find info for AbilityTag [%s] on AbilityInfo [%s]"), *AbilityTag.ToString(),
 		       *GetNameSafe(this));
 	}
-	return FAbilityInfo();
+	return FAbilityInfos();
 }

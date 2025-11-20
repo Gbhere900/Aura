@@ -5,10 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
 #include "Engine/DataAsset.h"
-#include "AbilityInfo.generated.h"
+#include "AbilityInfoData.generated.h"
 
-USTRUCT()
-struct FAbilityInfo
+USTRUCT(BlueprintType)
+struct FAbilityInfos
 {
 	GENERATED_BODY()
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
@@ -17,22 +17,25 @@ struct FAbilityInfo
 	UPROPERTY(BlueprintReadOnly)
 	FGameplayTag InputTag; 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
-	FImage BackgroundImage;
+	TObjectPtr<UMaterialInterface> BackgroundImage;
 	
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
-	FImage IconImage;
+	TObjectPtr<UTexture2D> IconImage;
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	FGameplayTag CoolDownTag;
 };
 /**
  * 
  */
-UCLASS()
-class AURA_API UAbilityInfo : public UDataAsset
+UCLASS(BlueprintType)
+class AURA_API UAbilityInfoData : public UDataAsset
 {
 	GENERATED_BODY()
 protected:
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
-	TArray<FAbilityInfo> AbilityInfos;
+	TArray<FAbilityInfos> AbilityInfos;
 
 public:
-	FAbilityInfo GetAbilityInfo(const FGameplayTag& AbilityTag,const bool bLogIfNotFound);
+	FAbilityInfos GetAbilityInfo(const FGameplayTag& AbilityTag,const bool bLogIfNotFound);
 };
