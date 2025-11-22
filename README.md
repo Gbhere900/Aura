@@ -2,6 +2,7 @@
 
 基于 **Unreal Engine 5 Gameplay Ability System（GAS）** 开发的俯视角第三人称 RPG 游戏 Demo，聚焦 **多人网络同步**、**模块化能力系统**、**数据驱动设计** 等核心特性，实现完整的 RPG 战斗闭环与可拓展的游戏架构。
 
+参考教程：https://www.udemy.com/course/unreal-engine-5-gas-top-down-rpg/?couponCode=IND21PM
 ## **1. 项目信息**
 
 
