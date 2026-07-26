@@ -176,6 +176,11 @@ bool UAuraAbilitySystermLibrary::IsFriendly(AActor* Actor1, AActor* Actor2)
 	return (HasPlayerTag1 && HasPlayerTag2 || HasEnemyTag1 && HasEnemyTag2);
 }
 
+int32 UAuraAbilitySystermLibrary::GetRewardXPByClassAndLevel(const UObject* WorldContextObject,ECharacterClass& CharacterClass,int32 Level)
+{
+	return GetCharacterClassInfo(WorldContextObject)->GetRewardXPByClassAndLevel(CharacterClass,Level);
+}
+
 
 
 

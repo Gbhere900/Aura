@@ -5,6 +5,7 @@
 
 #include "AudioMixerBlueprintLibrary.h"
 #include "AuraGameplayTags.h"
+#include "EnhancedInputSubsystems.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/GameplayAbility/AuraGameplayAbility.h"
 #include "Aura/Aura.h"
@@ -27,6 +28,7 @@ AAuraCharacterBase::AAuraCharacterBase()
 UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
+	
 }
 
 void AAuraCharacterBase::AddInitialGameplayAbilities()			//视频里是这个函数调用AuraASC中的AddGaneplayAbilities，而不是直接在这里实现
@@ -34,7 +36,7 @@ void AAuraCharacterBase::AddInitialGameplayAbilities()			//视频里是这个函
 	if (!HasAuthority())
 		return;
 	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AddInitialGameplayAbilities(GameplayAbilities);
-
+	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AddInitialPassiveAbilities(PassiveGameplayAbilities);
 }
 
 UNiagaraSystem* AAuraCharacterBase::GetBloodEffect_Implementation()

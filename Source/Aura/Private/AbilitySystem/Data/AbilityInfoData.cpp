@@ -16,7 +16,7 @@ FAbilityInfos UAbilityInfoData::GetAbilityInfo(const FGameplayTag& AbilityTag, c
 	}
 	if (bLogIfNotFound)
 	{
-		UE_LOG(LogAura, Error,TEXT("Can't find info for AbilityTag [%s] on AbilityInfo [%s]"), *AbilityTag.ToString(),
+		UE_LOG(LogTemp, Error,TEXT("Can't find info for AbilityTag [%s] on AbilityInfo [%s]"), *AbilityTag.ToString(),
 		       *GetNameSafe(this));
 	}
 	return FAbilityInfos();

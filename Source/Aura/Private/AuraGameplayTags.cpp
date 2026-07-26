@@ -86,7 +86,11 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Socket_LeftHand = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Socket.LeftHand"));;
 	GameplayTags.Socket_RightHand =  UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Socket.RightHand"));
 	GameplayTags.Socket_Tail = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Socket.Tail"));
-	
+
+	/*
+	 *Meta
+	 */
+	GameplayTags.Attribute_Meta_InComingXP = UGameplayTagsManager::Get().AddNativeGameplayTag(FName("Attributes.Meta.IncomingXP"));;
 	/*
 	 *else
 	 */

@@ -63,6 +63,8 @@ class AURA_API UAuraAttributeSet : public UAttributeSet
 
 protected:
 	bool TryShowDamageText(const FEffectProperties& EffectProperties,const float& Damage,bool bIsCriticalHit,bool bIsBlocked);
+
+	void SendXPMessage(FEffectProperties& EffectProperties);
 public:
 	UAuraAttributeSet();
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
@@ -171,11 +173,15 @@ public:
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,Mana);
 
 	/*
-	 *MetaAttribute
+	 *MetaAttribute 元属性不参与复制
 	 */
 	UPROPERTY(BlueprintReadOnly)
 	FGameplayAttributeData ComingDamage;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,ComingDamage);
+
+	UPROPERTY(BlueprintReadOnly)
+	FGameplayAttributeData ComingXP;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,ComingXP);
 	
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	void SetEffectProperties( const FGameplayEffectModCallbackData& Data,FEffectProperties& Props);

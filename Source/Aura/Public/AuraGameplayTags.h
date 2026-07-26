@@ -91,6 +91,11 @@ public:
 	FGameplayTag Socket_LeftHand;
 	FGameplayTag Socket_RightHand;
 	FGameplayTag Socket_Tail;
+
+	/*
+	 *Meta
+	 */
+	FGameplayTag Attribute_Meta_InComingXP;
 	
 	/*
 	 *else

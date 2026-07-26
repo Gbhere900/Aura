@@ -57,5 +57,8 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	static bool IsFriendly(AActor* Actor1,AActor* Actor2);
+
+	UFUNCTION()
+	static int32 GetRewardXPByClassAndLevel(const UObject* WorldContextObject,ECharacterClass& CharacterClass,int32 Level);
 };
 

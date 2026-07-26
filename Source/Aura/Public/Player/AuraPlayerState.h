@@ -37,7 +37,7 @@ public:
 	FORCEINLINE int32 const GetXP() const {return XP;}
 
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE int32 const GetLevel() const {return Level;}
+	FORCEINLINE int32 const GetLV() const {return Level;}
 	
 	UFUNCTION(BlueprintCallable)
 	void AddLevel(int AddNum)
@@ -85,6 +85,7 @@ protected:
 	UPROPERTY(VisibleAnywhere,ReplicatedUsing= OnRep_XP)
 	int32 XP = 0;
 
+	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 
 
 };

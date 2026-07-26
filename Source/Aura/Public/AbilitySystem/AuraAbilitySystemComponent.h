@@ -24,6 +24,7 @@ public:
 	void GameplayAbilityRelesedFunc(FGameplayTag GameplayTag);
 
 	void AddInitialGameplayAbilities(TArray<TSubclassOf<UGameplayAbility>> GameplayAbilities);
+	void AddInitialPassiveAbilities(TArray<TSubclassOf<UGameplayAbility>> GameplayAbilities);
 
 	bool HasInitializeAbility = false; //
 	

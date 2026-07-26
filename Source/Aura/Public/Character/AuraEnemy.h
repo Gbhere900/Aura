@@ -39,7 +39,8 @@ public:
 	FOnAttirbuteChangeSignature OnMaxHealthChangedDelegate;
 
 	virtual FTaggedMontage GetTaggedMontage_Implementation(FGameplayTag Tag) override;
-	
+
+	ECharacterClass GetCharacterClass(){return CharacterClass;};
 protected:
 	virtual void BeginPlay() override;
 	virtual void InitAbilityActorInfo() override;

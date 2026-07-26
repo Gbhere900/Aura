@@ -12,3 +12,11 @@ TArray<TSubclassOf<UGameplayAbility>> UCharacterClassInfo::GetCharacterClassAbil
 {
 	return Class_PrimaryAttributeEffectMap.FindChecked(CharacterClass).CharacterAbilities;
 }
+
+int32 UCharacterClassInfo::GetRewardXPByClassAndLevel(ECharacterClass& CharacterClass, int32 Level)
+{
+	return Class_PrimaryAttributeEffectMap[CharacterClass].XPReward.GetValueAtLevel(Level);
+}
+
+
+

@@ -11,8 +11,11 @@
 #include "GameplayEffectExtension.h"
 #include "AbilitySystem/AuraAbilitySystermLibrary.h"
 #include "AbilitySystem/CombatInterface.h"
+#include "Character/AuraCharacter.h"
+#include "Character/AuraEnemy.h"
 #include "GameFramework/Character.h"
 #include "Player/AuraPlayerController.h"
+#include "Player/AuraPlayerState.h"
 
 FEffectProperties::FEffectProperties()
 {
@@ -75,6 +78,7 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMo
 					CombatInterface->Die();
 				}
 				
+				SendXPMessage(EffectProperties);
 			}
 			else
 			{
@@ -82,17 +86,24 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectMo
 				GameplayTagContainer.AddTag(FAuraGameplayTags::Get().HitReact);
 				EffectProperties.TargetASC->TryActivateAbilitiesByTag(GameplayTagContainer);
 			}
-
-			
 			//获取isCritical和设置isCritical的顺序有讲究吗
 			bool bIsBlocked = UAuraAbilitySystermLibrary::GetIsBlocked(Data.EffectSpec.GetContext());
 			bool bIsCriticalHit = UAuraAbilitySystermLibrary::GetIsCriticalHit(Data.EffectSpec.GetContext());
 			TryShowDamageText(EffectProperties,ComingDamageValue,bIsCriticalHit,bIsBlocked);
 		}
-		
-		
 	}
-	
+
+	if (Data.EvaluatedData.Attribute == GetComingXPAttribute())
+	{
+		float ComingXPValue = GetComingXP();
+		SetComingXP(0);
+		// if (AAuraCharacter* PlayerCharacter = Cast<AAuraCharacter>(EffectProperties.SourceAvatarActor))
+		// {
+		// 	//这里让AS与PS耦合真的好吗,看看实际上视屏里是怎么处理的
+		// 	AAuraPlayerState*AuraPlayerState =Cast<AAuraPlayerState>(PlayerCharacter->GetPlayerState());
+		// 	AuraPlayerState->AddXP(ComingXPValue);
+		// }
+	}
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
 		SetHealth(FMath::Clamp(GetHealth(),0.f,GetMaxHealth()));
@@ -130,6 +141,21 @@ bool UAuraAttributeSet::TryShowDamageText(const FEffectProperties& EffectPropert
 		}
 	}
 	return false;
+}
+
+//这样实现获取经验值（使用框架）的好处体现在哪
+void UAuraAttributeSet::SendXPMessage(FEffectProperties& EffectProperties)
+{
+	if (AAuraEnemy* AuraEnemy = Cast<AAuraEnemy>(EffectProperties.TargetCharacter))
+	{
+		int32 Level = AuraEnemy->GetLevel();
+		ECharacterClass CharacterClass= AuraEnemy->GetCharacterClass();
+		FGameplayEventData PayLoad;
+		PayLoad.EventTag = FAuraGameplayTags::Get().Attribute_Meta_InComingXP;
+		PayLoad.EventMagnitude = UAuraAbilitySystermLibrary::GetRewardXPByClassAndLevel(AuraEnemy,CharacterClass,Level);
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(EffectProperties.SourceAvatarActor,
+			FAuraGameplayTags::Get().Attribute_Meta_InComingXP,PayLoad);
+	}
 }
 
 

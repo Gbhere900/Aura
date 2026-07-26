@@ -3,8 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ScalableFloat.h"
 #include "Engine/DataAsset.h"
 #include "CharacterClassInfo.generated.h"
+
 
 class UGameplayAbility;
 class UGameplayEffect;
@@ -28,6 +30,9 @@ struct FCharacterClassDefaultInfo
 
 	UPROPERTY(EditDefaultsOnly)
 	TArray<TSubclassOf<UGameplayAbility>> CharacterAbilities;
+
+	UPROPERTY(EditDefaultsOnly)
+	FScalableFloat XPReward;
 };
 UCLASS()
 class AURA_API UCharacterClassInfo : public UDataAsset
@@ -54,5 +59,8 @@ public:
 	TSubclassOf<UGameplayEffect> GetCharacterClassPrimaryEffect(const ECharacterClass& CharacterClass);
 
 	TArray<TSubclassOf<UGameplayAbility>> GetCharacterClassAbilities(const ECharacterClass& CharacterClass);
+
+	int32 GetRewardXPByClassAndLevel(ECharacterClass& CharacterClass,int32 Level);
+
 };
 

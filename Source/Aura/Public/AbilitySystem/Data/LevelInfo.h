@@ -13,6 +13,7 @@ USTRUCT(BlueprintType)
 struct FLevelInformation
 {
 	GENERATED_BODY()
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	int LevelXP;
 	
 	
@@ -25,7 +26,7 @@ class AURA_API ULevelInfo : public UDataAsset
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditDefaultsOnly, BlueprintRead)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<FLevelInformation> LevelInformations;
 
 	UFUNCTION(BlueprintCallable)
